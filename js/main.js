@@ -5,7 +5,6 @@
 window.onload = function() {
     var visEnter = document.querySelector('#enter-vis');
     visEnter.onclick = function() {
-        //alert(this.nextElementSibling.getAttribute('id'));
         this.nextElementSibling.style.display = 'block'
     };
     var visExit = document.querySelector('#exit-vis');

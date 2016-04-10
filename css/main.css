@@ -1,6 +1,9 @@
 * {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
 
 html, body {
   height: 100%;
@@ -38,7 +41,14 @@ html, body {
   position: absolute;
   top: 2em;
   right: 2em;
-  color: aliceblue; }
+  color: aliceblue;
+  width: 2em;
+  height: 2em; }
+  #exit-vis svg {
+    width: 100%;
+    height: 100%; }
+    #exit-vis svg path {
+      fill: aliceblue; }
 
 #vis {
   position: absolute;
@@ -52,5 +62,35 @@ html, body {
   #vis h1 {
     text-align: center;
     margin-top: 10em; }
+
+#position {
+  position: absolute;
+  top: 2em;
+  left: 45%; }
+
+#info-cont {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4em; }
+  #info-cont #featureName {
+    margin: 0 auto;
+    padding: 2em;
+    height: 100%;
+    width: 20%;
+    text-align: center;
+    color: crimson;
+    font-weight: bold; }
+
+#select {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  width: auto;
+  padding: 2em; }
+  #select input {
+    float: left; }
 
 /*# sourceMappingURL=main.css.map */

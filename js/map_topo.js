@@ -1,64 +1,5 @@
-/**
- * Created by sc on 3/14/16.
- */
-
-
-// Convert CH y/x to WGS lat
-function CHtoWGSlat(y, x) {
-
-    // Converts military to civil and  to unit = 1000km
-    // Auxiliary values (% Bern)
-    var y_aux = (y - 600000)/1000000;
-    var x_aux = (x - 200000)/1000000;
-
-    // Process lat
-    lat = 16.9023892
-        +  3.238272 * x_aux
-        -  0.270978 * Math.pow(y_aux,2)
-        -  0.002528 * Math.pow(x_aux,2)
-        -  0.0447   * Math.pow(y_aux,2) * x_aux
-        -  0.0140   * Math.pow(x_aux,3);
-
-    // Unit 10000" to 1 " and converts seconds to degrees (dec)
-    lat = lat * 100/36;
-
-    return lat;
-
-}
-
-// Convert CH y/x to WGS long
-function CHtoWGSlng(y, x) {
-
-    // Converts military to civil and  to unit = 1000km
-    // Auxiliary values (% Bern)
-    var y_aux = (y - 600000)/1000000;
-    var x_aux = (x - 200000)/1000000;
-
-    // Process long
-    lng = 2.6779094
-        + 4.728982 * y_aux
-        + 0.791484 * y_aux * x_aux
-        + 0.1306   * y_aux * Math.pow(x_aux,2)
-        - 0.0436   * Math.pow(y_aux,3);
-
-    // Unit 10000" to 1 " and converts seconds to degrees (dec)
-    lng = lng * 100/36;
-
-    return lng;
-
-}
-
-
-
 window.addEventListener('load', function () {
 
-    //map extent
-    //var minX = 605290, maxX = 1276940, minY = 5740090, maxY = 6082390;
-    var minX = 700000, maxX = 1200000, minY = 5750000, maxY = 6050000;
-
-
-    var WGSlongitude = CHtoWGSlng(670000, 160000);
-    var WGSlatitude = CHtoWGSlat(670000, 160000);
 
     var vectorKantone = new ol.layer.Vector({
         source: new ol.source.Vector({
@@ -97,37 +38,19 @@ window.addEventListener('load', function () {
 
     lyrWind.setVisible(false);
     lyrWasser.setVisible(false);
-    lyrKernkraft.setVisible(true);
+    lyrKernkraft.setVisible(false);
 
-    var map = new ol.Map({
+
+    var lyr1 = ga.layer.create('ch.swisstopo.pixelkarte-grau');
+
+    var map = new ga.Map({
         target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.Stamen({layer: 'toner-background'})
-            }),
-            vectorGrenze, vectorKantone, lyrWind, lyrWasser, lyrKernkraft
-        ],
+        layers: [lyr1, vectorGrenze, vectorKantone, lyrWind, lyrWasser, lyrKernkraft],
         view: new ol.View({
-            //projection: swissProjection,
-            center: ol.proj.fromLonLat([WGSlongitude, WGSlatitude]),
-            resolution: 350,
-            //minZoom: 8,
-            maxResolution: 400,
-            minResolution: 200,
-            extent: [minX, minY, maxX, maxY]
+            resolution: 250,
+            center: [670000, 160000]
         })
     });
-
-    //var extent = map.getView().calculateExtent(map.getSize());
-    //map.getView().fit(extent, map.getSize());
-
-    //var mousePosition = new ol.control.MousePosition({
-    //    coordinateFormat: ol.coordinate.createStringXY(2),
-    //    //projection: 'EPSG:4326',
-    //    target: document.getElementById('position'),
-    //    undefinedHTML: '&nbsp;'
-    //});
-    //map.addControl(mousePosition);
 
     var highlightStyleCache = {};
     var featureOverlay = new ol.FeatureOverlay({
@@ -184,7 +107,7 @@ window.addEventListener('load', function () {
             }
             highlight = feature;
         }
-        
+
 
     };
 
@@ -225,6 +148,4 @@ window.addEventListener('load', function () {
         })
     }
 
-
 });
-

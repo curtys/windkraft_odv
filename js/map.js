@@ -62,7 +62,7 @@ window.addEventListener('load', function () {
 
     var vectorKantone = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'data/g1k15.kml',
+            url: 'data/map/g1k15.kml',
             format: new ol.format.KML({
                 extractStyles: false
             })
@@ -77,7 +77,7 @@ window.addEventListener('load', function () {
 
     var vectorGrenze = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'data/g1l15.kml',
+            url: 'data/map/g1l15.kml',
             format: new ol.format.KML({
                 extractStyles: false
             })

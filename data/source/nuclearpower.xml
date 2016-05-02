@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nuclearpowerplants>
+    <plant>
+        <id>KKM</id>
+        <name>Kernkraftwerk Mühleberg</name>
+        <canton>Bern</canton>
+        <production>2934.180</production>
+        <unit>GWh</unit>
+        <asat>2015</asat>
+    </plant>
+    <plant>
+        <id>KKB1</id>
+        <name>Kernkraftwerk Beznau-1</name>
+        <canton>Aargau</canton>
+        <production>628.540</production>
+        <unit>GWh</unit>
+        <asat>2015</asat>
+    </plant>
+    <plant>
+        <id>KKB2</id>
+        <name>Kernkraftwerk Beznau-2</name>
+        <canton>Aargau</canton>
+        <production>2023.360</production>
+        <unit>GWh</unit>
+        <asat>2015</asat>
+    </plant>
+    <plant>
+        <id>KKG</id>
+        <name>Kernkraftwerk Gösgen</name>
+        <canton>Solothurn</canton>
+        <production>7971.200</production>
+        <unit>GWh</unit>
+        <asat>2015</asat>
+    </plant>
+    <plant>
+        <id>KKL</id>
+        <name>Kernkraftwerk Leibstadt</name>
+        <canton>Aargau</canton>
+        <production>8598.520</production>
+        <unit>GWh</unit>
+        <asat>2015</asat>
+    </plant>
+</nuclearpowerplants>

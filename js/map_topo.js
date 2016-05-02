@@ -1,9 +1,66 @@
+// Convert CH y/x to WGS lat
+function CHtoWGSlat(y, x) {
+
+    // Converts military to civil and  to unit = 1000km
+    // Auxiliary values (% Bern)
+    var y_aux = (y - 600000)/1000000;
+    var x_aux = (x - 200000)/1000000;
+
+    // Process lat
+    lat = 16.9023892
+        +  3.238272 * x_aux
+        -  0.270978 * Math.pow(y_aux,2)
+        -  0.002528 * Math.pow(x_aux,2)
+        -  0.0447   * Math.pow(y_aux,2) * x_aux
+        -  0.0140   * Math.pow(x_aux,3);
+
+    // Unit 10000" to 1 " and converts seconds to degrees (dec)
+    lat = lat * 100/36;
+
+    return lat;
+
+}
+
+// Convert CH y/x to WGS long
+function CHtoWGSlng(y, x) {
+
+    // Converts military to civil and  to unit = 1000km
+    // Auxiliary values (% Bern)
+    var y_aux = (y - 600000)/1000000;
+    var x_aux = (x - 200000)/1000000;
+
+    // Process long
+    lng = 2.6779094
+        + 4.728982 * y_aux
+        + 0.791484 * y_aux * x_aux
+        + 0.1306   * y_aux * Math.pow(x_aux,2)
+        - 0.0436   * Math.pow(y_aux,3);
+
+    // Unit 10000" to 1 " and converts seconds to degrees (dec)
+    lng = lng * 100/36;
+
+    return lng;
+
+}
+
+
+
 window.addEventListener('load', function () {
 
 
+// By default OpenLayers does not know about the EPSG:2056 (CH1903+/LV95).
+    var CH1903plus = new ol.proj.Projection({
+        code: 'EPSG:2056',
+        // The extent is used to determine zoom level 0. Recommended values for a
+        // projection's validity extent can be found at http://epsg.io/.
+        extent: [2485869.5728, 1076443.1884, 2837076.5648, 1299941.7864],
+        units: 'm'
+    });
+    ol.proj.addProjection(CH1903plus);
+
     var vectorKantone = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'data/g1k15.kml',
+            url: 'data/map/g1k15.kml',
             format: new ol.format.KML({
                 extractStyles: false
             })
@@ -18,11 +75,12 @@ window.addEventListener('load', function () {
 
     var vectorGrenze = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: 'data/g1l15.kml',
+            url: 'data/map/g1l15.kml',
             format: new ol.format.KML({
                 extractStyles: false
             })
         }),
+        projection: CH1903plus,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
                 //color: '#A89CFF',
@@ -51,6 +109,16 @@ window.addEventListener('load', function () {
             center: [670000, 160000]
         })
     });
+
+    var mousePosition = new ol.control.MousePosition({
+        coordinateFormat: ol.coordinate.createStringXY(2),
+        //projection: 'EPSG:4326',
+        //projection: 'EPSG:21781',
+        //projection: 'EPSG:2056',
+        target: document.getElementById('position'),
+        undefinedHTML: '&nbsp;'
+    });
+    map.addControl(mousePosition);
 
     var highlightStyleCache = {};
     var featureOverlay = new ol.FeatureOverlay({

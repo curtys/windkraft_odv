@@ -6,8 +6,8 @@ window.addEventListener('load', function(){
 
     var width = window.innerWidth-20,
         height = window.innerHeight-20,
-        padding = 2.5, // separation between same-color circles
-        clusterPadding = 15, // separation between different-color circles
+        padding = 5, // separation between same-color circles
+        clusterPadding = 30, // separation between different-color circles
         maxRadius = 12;
 
     // Reihenfolge der Kantone:
@@ -26,21 +26,11 @@ window.addEventListener('load', function(){
         "#c0a4a9", "#bc01c1", "#906033", "#e49c3f", "#8e4db9", "#bb3a64", "#cb1478", "#776b09", "#94b743", "#763eff",
         "#1a7a3e", "#617046", "#915c62", "#ec8dc0", "#ba22ac", "#437461", "#913ddc", "#4bbda8"]);
 
-
-    //var color = d3.scale.category20c()
-    //    .domain(d3.range(clusters.length));
-
-    //var drag_behavior = d3.behavior.drag()
-    //    .on("drag", function() {
-    //            // cancel the drag event
-    //            drag_behavior.on("drag", null);
-    //
-    //    });
-
     d3.json('data/data.json', function (err, json) {
 
         var data = json;
         var productionMinimum = 0;
+        var configuration1 = {}, configuration2 = {};
 
 
         var l_converter = d3.scale.sqrt().domain(data.valuedomain).nice().range([3, 75]);
@@ -48,18 +38,17 @@ window.addEventListener('load', function(){
         // second visualisation
         (function() {
 
-            var target = '#vis2', classN = 'vis2', clusters2 = [], nodes2 = [], clusterid = 0, expectedNumClusters = 3;
+            var target = '#vis', classN = 'vis2', clusters = [], nodes = [], clusterid = 0, expectedNumClusters = 3;
 
 
-            function createNode2(pivot, plant) {
-                var node = plant;
-                node.mode = 'vis2';
+            function createNode(pivot, plant) {
+                var node = dataViewUtility.clone(plant);
                 node.clusterid = clusterid;
                 node.radius = l_converter(plant.production);
                 //node.x = Math.cos(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + width / 2 + Math.random();
                 //node.y = Math.sin(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + height / 2 + Math.random();
-                nodes2.push(node);
-                if(node.id == pivot.id) clusters2.push(node);
+                nodes.push(node);
+                if(node.id == pivot.id) clusters.push(node);
             }
 
             var hydroplants = dataViewUtility.createJointArray(data, 'hydropowerplants'),
@@ -67,15 +56,15 @@ window.addEventListener('load', function(){
                 nuclearplants = dataViewUtility.createJointArray(data, 'nuclearpowerplants');
 
             hydroplants.forEach(function(plant) {
-                createNode2(data.globalHPFacilityHydro, plant);
+                createNode(data.globalHPFacilityHydro, plant);
             });
             clusterid++;
             windplants.forEach(function(plant) {
-                createNode2(data.globalHPFacilityWind, plant);
+                createNode(data.globalHPFacilityWind, plant);
             });
             clusterid++;
             nuclearplants.forEach(function(plant) {
-                createNode2(data.globalHPFacilityNuclear, plant);
+                createNode(data.globalHPFacilityNuclear, plant);
             });
 
 
@@ -101,15 +90,26 @@ window.addEventListener('load', function(){
                 }
             })();
 
-            visualise(target, classN, nodes2, clusters2, clickController);
-        
+            configuration2 = createConfiguration(2, target, classN, nodes, clusters, clickController);
+            //visualise(target, classN, nodes, clusters, clickController);
+
         })();
 
+        var vis = visualise(configuration2);
 
 
     });
 
-    function visualise(target, className, nodes, clusters, clickController) {
+    function createConfiguration(configID, target, className, nodes, clusters, clickcontroller) {
+        return {configID: configID, target: target, className: className, nodes: nodes, clusters: clusters, clickcontroller: clickcontroller};
+    }
+
+    function visualise(configuration) {
+        var target = configuration.target,
+            className = configuration.className,
+            nodes = configuration.nodes,
+            clusters = configuration.clusters,
+            clickController = configuration.clickcontroller;
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
@@ -142,7 +142,6 @@ window.addEventListener('load', function(){
             //.on('mousedown.drag', null)
             .on('click', clickController);
 
-        console.log(circle);
 
         function tick(e) {
             circle
@@ -152,7 +151,10 @@ window.addEventListener('load', function(){
                 .attr("cy", function(d) { return d.y; });
         }
 
+        return {configID: configuration.configID, force: force, svg: svg, circle: circle};
+
     }
+
     // Move d to be adjacent to the cluster node.
     function cluster(alpha, clusters) {
         return function(d) {

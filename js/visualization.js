@@ -4,6 +4,8 @@
 
 window.addEventListener('load', function(){
 
+
+
     var width = window.innerWidth-20,
         height = window.innerHeight-20,
         padding = 2.5, // separation between same-color circles
@@ -41,17 +43,19 @@ window.addEventListener('load', function(){
 
         var data = json;
         var productionMinimum = 0;
+        var configuration1 = {}, configuration2 = {};
 
 
         var l_converter = d3.scale.sqrt().domain(data.valuedomain).nice().range([3, 75]);
 
         (function() {
 
-            var target = '#vis1', classN = 'vis1', clusters = [], nodes = [], clusterid = 0;
+            var target = '#vis', classN = 'vis1', clusters = [], nodes = [], clusterid = 0;
 
             function createNode(item, plant) {
                 if(plant.production < productionMinimum || plant.id == item.highestprodfacility.id) return;
-                var node = plant;
+                // objects need to be cloned, so that multiple configurations of the visualisation can exist at the same time
+                var node = dataViewUtility.clone(plant);
                 node.cluster = item.abbr;
                 node.clusterid = clusterid;
                 node.radius = l_converter(plant.production);
@@ -62,7 +66,7 @@ window.addEventListener('load', function(){
 
             data.cantons.forEach(function (item) {
                 if(!item.highestprodfacility) return;
-                var cluster = item.highestprodfacility;
+                var cluster = dataViewUtility.clone(item.highestprodfacility);
                 cluster.cluster = item.abbr;
                 cluster.clusterid = clusterid;
                 cluster.radius = l_converter(item.highestprodfacility.production);
@@ -106,76 +110,98 @@ window.addEventListener('load', function(){
                 }
             })();
 
-            visualise(target, classN, nodes, clusters, clickController);
+            configuration1 = createConfiguration(target, classN, nodes, clusters, clickController);
+
+            visualise(configuration1);
 
         })();
 
 
         // second visualisation
-        //(function() {
-        //
-        //    var target = '#vis2', classN = 'vis2', clusters2 = [], nodes2 = [], clusterid = 0, expectedNumClusters = 3;
-        //
-        //
-        //    function createNode2(pivot, plant) {
-        //        var node = plant;
-        //        node.mode = 'vis2';
-        //        node.clusterid = clusterid;
-        //        node.radius = l_converter(plant.production);
-        //        //node.x = Math.cos(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + width / 2 + Math.random();
-        //        //node.y = Math.sin(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + height / 2 + Math.random();
-        //        nodes2.push(node);
-        //        if(node.id == pivot.id) clusters2.push(node);
-        //    }
-        //
-        //    var hydroplants = dataViewUtility.createJointArray(data, 'hydropowerplants'),
-        //        windplants = dataViewUtility.createJointArray(data, 'windenergyplants'),
-        //        nuclearplants = dataViewUtility.createJointArray(data, 'nuclearpowerplants');
-        //
-        //    hydroplants.forEach(function(plant) {
-        //        createNode2(data.globalHPFacilityHydro, plant);
-        //    });
-        //    clusterid++;
-        //    windplants.forEach(function(plant) {
-        //        createNode2(data.globalHPFacilityWind, plant);
-        //    });
-        //    clusterid++;
-        //    nuclearplants.forEach(function(plant) {
-        //        createNode2(data.globalHPFacilityNuclear, plant);
-        //    });
-        //
-        //
-        //    var clickController = (function(d){
-        //        var currElement, prevElement, prevElementColor,
-        //            highlightColor = '#000', infoEle = document.querySelector(target+' #info');
-        //
-        //        return function(d){
-        //            if(prevElement) {
-        //                d3.select(prevElement).style('fill', prevElementColor);
-        //                if(prevElement == this) {
-        //                    prevElement = null;
-        //                    infoEle.innerHTML = '';
-        //                    return
-        //                }
-        //            }
-        //            prevElementColor = d3.select(this).style('fill');
-        //            d3.select(this).style("fill", highlightColor);
-        //            prevElement = this;
-        //            var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
-        //            infoEle.innerHTML =
-        //                'Node Info:<br>' + 'Plant ID: ' + d.id + '<br>' + 'Production: ' + d.production + 'GWh';
-        //        }
-        //    })();
-        //
-        //    visualise(target, classN, nodes2, clusters2, clickController);
-        //
-        //})();
+        (function() {
 
+            var target = '#vis1', classN = 'vis2', clusters = [], nodes = [], clusterid = 0, expectedNumClusters = 3;
+
+
+            function createNode2(pivot, plant) {
+                var node = dataViewUtility.clone(plant);
+                node.mode = 'vis2';
+                node.clusterid = clusterid;
+                node.radius = l_converter(plant.production);
+                //node.x = Math.cos(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + width / 2 + Math.random();
+                //node.y = Math.sin(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + height / 2 + Math.random();
+                nodes.push(node);
+                if(node.id == pivot.id) clusters.push(node);
+            }
+
+            var hydroplants = dataViewUtility.createJointArray(data, 'hydropowerplants'),
+                windplants = dataViewUtility.createJointArray(data, 'windenergyplants'),
+                nuclearplants = dataViewUtility.createJointArray(data, 'nuclearpowerplants');
+
+            hydroplants.forEach(function(plant) {
+                createNode2(data.globalHPFacilityHydro, plant);
+            });
+            clusterid++;
+            windplants.forEach(function(plant) {
+                createNode2(data.globalHPFacilityWind, plant);
+            });
+            clusterid++;
+            nuclearplants.forEach(function(plant) {
+                createNode2(data.globalHPFacilityNuclear, plant);
+            });
+
+
+            var clickController = (function(d){
+                var currElement, prevElement, prevElementColor,
+                    highlightColor = '#000', infoEle = document.querySelector(target+' #info');
+
+                return function(d){
+                    if(prevElement) {
+                        d3.select(prevElement).style('fill', prevElementColor);
+                        if(prevElement == this) {
+                            prevElement = null;
+                            infoEle.innerHTML = '';
+                            return
+                        }
+                    }
+                    prevElementColor = d3.select(this).style('fill');
+                    d3.select(this).style("fill", highlightColor);
+                    prevElement = this;
+                    var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
+                    infoEle.innerHTML =
+                        'Node Info:<br>' + 'Plant ID: ' + d.id + '<br>' + 'Production: ' + d.production + 'GWh';
+                }
+            })();
+
+            configuration2 = createConfiguration(target, classN, nodes, clusters, clickController);
+            //visualise(target, classN, nodes, clusters, clickController);
+
+        })();
+
+
+        //var radios = document.querySelectorAll('input');
+        //radios[0].addEventListener('change', function() {
+        //    d3.select('svg.vis2').remove();
+        //    visualise(configuration1);
+        //});
+        //radios[1].addEventListener('change', function() {
+        //    d3.select('svg.vis1').remove();
+        //    visualise(configuration2);
+        //});
 
 
     });
 
-    function visualise(target, className, nodes, clusters, clickController) {
+    function createConfiguration(target, className, nodes, clusters, clickcontroller) {
+        return {target: target, className: className, nodes: nodes, clusters: clusters, clickcontroller: clickcontroller};
+    }
+
+    function visualise(configuration) {
+        var target = configuration.target,
+            className = configuration.className,
+            nodes = configuration.nodes,
+            clusters = configuration.clusters,
+            clickController = configuration.clickcontroller;
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
@@ -208,7 +234,6 @@ window.addEventListener('load', function(){
             //.on('mousedown.drag', null)
             .on('click', clickController);
 
-        console.log(circle);
 
         function tick(e) {
             circle

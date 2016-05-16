@@ -1,0 +1,152 @@
+/* colors */
+nav {
+  font-size: 2em; }
+  nav div {
+    cursor: pointer;
+    position: fixed;
+    top: 1rem;
+    transition: color 0.5s ease; }
+    nav div:hover {
+      color: #056197; }
+  nav #nav-back {
+    left: 2rem;
+    font-size: 1.25em;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg); }
+  nav #nav-menu {
+    right: 2rem; }
+
+/* The Overlay (background) */
+.overlay {
+  height: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  background-color: #2299dd;
+  background-color: rgba(34, 153, 221, 0.9);
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+  transition: 0.5s;
+  /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */ }
+
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  top: 25%;
+  /* 25% from the top */
+  width: 100%;
+  /* 100% width */
+  text-align: center;
+  /* Centered text/links */
+  margin-top: 30px;
+  /* 30px top margin to avoid conflict with the close button on smaller screens */ }
+
+/* The navigation links inside the overlay */
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #fff;
+  display: block;
+  /* Display block instead of inline */
+  transition: 0.3s;
+  /* Transition effects on hover (color) */ }
+
+.overlay a:hover, .overlay a:focus {
+  color: #056197; }
+
+/* Position the close button (top right corner) */
+.closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px !important;
+  /* Override the font-size specified earlier (36px) for all navigation links */ }
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+  .overlay a {
+    font-size: 20px; }
+
+  .closebtn {
+    font-size: 40px !important;
+    top: 15px;
+    right: 35px; } }
+h1 {
+  text-align: center;
+  font-size: 3em;
+  padding-top: 3rem; }
+
+#content {
+  padding-top: 1rem;
+  width: 50rem;
+  margin: 0 auto; }
+  #content a:before {
+    content: '\027A4'; }
+  #content section {
+    padding-top: 2rem; }
+  #content article {
+    margin-top: 1.5rem; }
+
+pre {
+  font-family: "Courier 10 Pitch", Courier, monospace;
+  font-size: 95%;
+  line-height: 150%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap; }
+
+code {
+  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+  font-size: 95%;
+  line-height: 150%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  color: #056197; }
+
+#content code {
+  display: block;
+  padding: 0.5em 1em;
+  border: 2px solid #2299dd;
+  border-radius: 2px; }
+
+table {
+  width: 100%;
+  border: 2px solid #2299dd;
+  border-collapse: collapse; }
+
+th, td {
+  border: 1px solid #2299dd;
+  border-collapse: collapse;
+  padding: 1.2em;
+  text-align: left; }
+
+th {
+  color: #056197;
+  font-size: 1.1em; }
+
+tr td:first-of-type {
+  font-weight: bold; }
+
+@media only screen and (max-width: 1000px) {
+  h1 {
+    padding-top: 4rem;
+    font-size: 2.5em; }
+
+  #content {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    width: 100%; } }
+@media only screen and (max-width: 800px) {
+  th, td {
+    padding: 0.5em; } }
+
+/*# sourceMappingURL=aux.css.map */

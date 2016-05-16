@@ -2,7 +2,8 @@
 <nuclearpowerplants>
     <plant>
         <id>KKM</id>
-        <name>Kernkraftwerk Mühleberg</name>
+        <name>Mühleberg</name>
+        <reactortype>Siedewasserreaktor</reactortype>
         <canton>Bern</canton>
         <production>2934.180</production>
         <unit>GWh</unit>
@@ -10,7 +11,8 @@
     </plant>
     <plant>
         <id>KKB1</id>
-        <name>Kernkraftwerk Beznau-1</name>
+        <name>Beznau-1</name>
+        <reactortype>Druckwasserreaktor</reactortype>
         <canton>Aargau</canton>
         <production>628.540</production>
         <unit>GWh</unit>
@@ -18,7 +20,8 @@
     </plant>
     <plant>
         <id>KKB2</id>
-        <name>Kernkraftwerk Beznau-2</name>
+        <name>Beznau-2</name>
+        <reactortype>Druckwasserreaktor</reactortype>
         <canton>Aargau</canton>
         <production>2023.360</production>
         <unit>GWh</unit>
@@ -26,7 +29,8 @@
     </plant>
     <plant>
         <id>KKG</id>
-        <name>Kernkraftwerk Gösgen</name>
+        <name>Gösgen</name>
+        <reactortype>Druckwasserreaktor</reactortype>
         <canton>Solothurn</canton>
         <production>7971.200</production>
         <unit>GWh</unit>
@@ -34,7 +38,8 @@
     </plant>
     <plant>
         <id>KKL</id>
-        <name>Kernkraftwerk Leibstadt</name>
+        <name>Leibstadt</name>
+        <reactortype>Siedewasserreaktor</reactortype>
         <canton>Aargau</canton>
         <production>8598.520</production>
         <unit>GWh</unit>

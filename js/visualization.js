@@ -2,14 +2,12 @@
  * Created by sc on 4/30/16.
  */
 
-window.addEventListener('load', function(){
+window.addEventListener('load', function () {
 
-
-
-    var width = window.innerWidth-20,
-        height = window.innerHeight-20,
-        padding = 2.5, // separation between same-color circles
-        clusterPadding = 15, // separation between different-color circles
+    var width = 750,
+        height = 750,
+        padding = 2, // separation between same-color circles
+        clusterPadding = 12, // separation between different-color circles
         maxRadius = 12;
 
     // Reihenfolge der Kantone:
@@ -48,12 +46,12 @@ window.addEventListener('load', function(){
 
         var l_converter = d3.scale.sqrt().domain(data.valuedomain).nice().range([3, 75]);
 
-        (function() {
+        (function () {
 
             var target = '#vis', classN = 'vis1', clusters = [], nodes = [], clusterid = 0;
 
             function createNode(item, plant) {
-                if(plant.production < productionMinimum || plant.id == item.highestprodfacility.id) return;
+                if (plant.production < productionMinimum || plant.id == item.highestprodfacility.id) return;
                 // objects need to be cloned, so that multiple configurations of the visualisation can exist at the same time
                 var node = dataViewUtility.clone(plant);
                 node.cluster = item.abbr;
@@ -65,7 +63,7 @@ window.addEventListener('load', function(){
             }
 
             data.cantons.forEach(function (item) {
-                if(!item.highestprodfacility) return;
+                if (!item.highestprodfacility) return;
                 var cluster = dataViewUtility.clone(item.highestprodfacility);
                 cluster.cluster = item.abbr;
                 cluster.clusterid = clusterid;
@@ -84,116 +82,80 @@ window.addEventListener('load', function(){
                 clusterid++;
             });
 
-            var clickController = (function(d){
-                var currElement, prevElement, prevElementColor,
-                    highlightColor = '#000', infoEle = document.querySelector(target+' #info');
+            console.log(clusters);
 
-                return function(d){
-                    if(prevElement) {
-                        d3.select(prevElement).style('fill', prevElementColor);
-                        if(prevElement == this) {
-                            prevElement = null;
-                            infoEle.innerHTML = '';
-                            return
-                        }
-                    }
-                    prevElementColor = d3.select(this).style('fill');
-                    d3.select(this).style("fill", highlightColor);
-                    prevElement = this;
-                    var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
-                    infoEle.innerHTML = 'Cluster Info:<br>'
-                        + clusterInfo.name + ' ' + clusterInfo.abbr + '<br>'
-                        + 'Production Wasserkraft: ' + clusterInfo.hydropowerproduction + 'GWh' + '<br>'
-                        + 'Produktion Kernenergie: ' + clusterInfo.nuclearenergyproduction + 'GWh' + '<br>'
-                        + 'Produktion Windenergie: ' + clusterInfo.windenergyproduction + 'GWh' + '<br>'
-                        + 'Node Info:<br>' + 'Plant ID: ' + d.id + '<br>' + 'Production: ' + d.production + 'GWh';
-                }
-            })();
+            function createLegend(clusters) {
+                var html = '', targetelem = document.querySelector('#legend-cont');
+                clusters.forEach(function (cluster) {
+                    var bgcolor = color(cluster.clusterid);
+                    var clusterInfo = dataViewUtility.getCantonByAbbr(data, cluster.cluster, true);
+                    var descr = clusterInfo.name;
+                    html += '<li><span style="background-color: ' + bgcolor + ';"></span>' + descr + '</li>'
+                });
 
-            configuration1 = createConfiguration(target, classN, nodes, clusters, clickController);
-
-            visualise(configuration1);
-
-        })();
-
-
-        // second visualisation
-        (function() {
-
-            var target = '#vis1', classN = 'vis2', clusters = [], nodes = [], clusterid = 0, expectedNumClusters = 3;
-
-
-            function createNode2(pivot, plant) {
-                var node = dataViewUtility.clone(plant);
-                node.mode = 'vis2';
-                node.clusterid = clusterid;
-                node.radius = l_converter(plant.production);
-                //node.x = Math.cos(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + width / 2 + Math.random();
-                //node.y = Math.sin(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + height / 2 + Math.random();
-                nodes.push(node);
-                if(node.id == pivot.id) clusters.push(node);
+                targetelem.innerHTML = html;
             }
 
-            var hydroplants = dataViewUtility.createJointArray(data, 'hydropowerplants'),
-                windplants = dataViewUtility.createJointArray(data, 'windenergyplants'),
-                nuclearplants = dataViewUtility.createJointArray(data, 'nuclearpowerplants');
-
-            hydroplants.forEach(function(plant) {
-                createNode2(data.globalHPFacilityHydro, plant);
-            });
-            clusterid++;
-            windplants.forEach(function(plant) {
-                createNode2(data.globalHPFacilityWind, plant);
-            });
-            clusterid++;
-            nuclearplants.forEach(function(plant) {
-                createNode2(data.globalHPFacilityNuclear, plant);
-            });
-
-
-            var clickController = (function(d){
+            var clickController = (function (d) {
                 var currElement, prevElement, prevElementColor,
-                    highlightColor = '#000', infoEle = document.querySelector(target+' #info');
+                    highlightColor = '#2299dd', infoEle = document.querySelector('#descr'),
+                    backupEle = document.querySelector('#backup-descr');
 
-                return function(d){
-                    if(prevElement) {
+                return function (d) {
+                    if (prevElement) {
                         d3.select(prevElement).style('fill', prevElementColor);
-                        if(prevElement == this) {
+                        if (prevElement == this) {
                             prevElement = null;
                             infoEle.innerHTML = '';
+                            backupEle.innerHTML = '';
                             return
                         }
                     }
                     prevElementColor = d3.select(this).style('fill');
-                    d3.select(this).style("fill", highlightColor);
+                    d3.select(this).style('fill', highlightColor);
                     prevElement = this;
                     var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
-                    infoEle.innerHTML =
-                        'Node Info:<br>' + 'Plant ID: ' + d.id + '<br>' + 'Production: ' + d.production + 'GWh';
+                    var total = clusterInfo.hydropowerproduction+clusterInfo.nuclearenergyproduction+clusterInfo.windenergyproduction;
+                    var html = '<strong>Kanton '+ clusterInfo.name+'</strong><br>'
+                        + 'Ganzjährliche Produktion von<br>'
+                        + 'Wasserkraft: <strong>' + clusterInfo.hydropowerproduction + '</strong> GWh' + '<br>'
+                        + 'Kernenergie: <strong>' + clusterInfo.nuclearenergyproduction + '</strong> GWh' + '<br>'
+                        + 'Windenergie: <strong>' + clusterInfo.windenergyproduction + '</strong> GWh' + '<br>'
+                        + 'Total: <strong>' + total + '</strong> GWh<br>'
+                        + '<br>'
+                        + '<strong>' + d.type+' '+d.name+'</strong><br>'
+                        + 'Produktion: ' + d.production + ' GWh<br>'
+                        + Math.round((d.production/total)*1000)/10+'% der kantonalen Produktion';
+                    infoEle.innerHTML = backupEle.innerHTML = html;
                 }
             })();
 
-            configuration2 = createConfiguration(target, classN, nodes, clusters, clickController);
-            //visualise(target, classN, nodes, clusters, clickController);
+            var tooltipController = (function (d) {
+
+                return function (d) {
+                    return d.type +' '+ d.name + '<br>' + d.production+' GWh';
+                }
+
+            })();
+
+            configuration1 = createConfiguration(target, classN, nodes, clusters, clickController, tooltipController);
+
+            visualise(configuration1);
+            createLegend(clusters);
 
         })();
-
-
-        //var radios = document.querySelectorAll('input');
-        //radios[0].addEventListener('change', function() {
-        //    d3.select('svg.vis2').remove();
-        //    visualise(configuration1);
-        //});
-        //radios[1].addEventListener('change', function() {
-        //    d3.select('svg.vis1').remove();
-        //    visualise(configuration2);
-        //});
-
 
     });
 
-    function createConfiguration(target, className, nodes, clusters, clickcontroller) {
-        return {target: target, className: className, nodes: nodes, clusters: clusters, clickcontroller: clickcontroller};
+    function createConfiguration(target, className, nodes, clusters, clickcontroller, tooltipController) {
+        return {
+            target: target,
+            className: className,
+            nodes: nodes,
+            clusters: clusters,
+            clickcontroller: clickcontroller,
+            tooltipcontroller: tooltipController
+        };
     }
 
     function visualise(configuration) {
@@ -201,52 +163,111 @@ window.addEventListener('load', function(){
             className = configuration.className,
             nodes = configuration.nodes,
             clusters = configuration.clusters,
-            clickController = configuration.clickcontroller;
+            clickController = configuration.clickcontroller,
+            tooltipController = configuration.tooltipcontroller;
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
             .sort(null)
             .size([width, height])
-            .children(function(d) { return d.values; })
-            .value(function(d) { return d.radius * d.radius; })
-            .nodes({values: d3.nest()
-                .key(function(d) { return d.cluster; })
-                .entries(nodes)});
+            .children(function (d) {
+                return d.values;
+            })
+            .value(function (d) {
+                return d.radius * d.radius;
+            })
+            .nodes({
+                values: d3.nest()
+                    .key(function (d) {
+                        return d.clusterid;
+                    })
+                    .entries(nodes)
+            });
 
         var force = d3.layout.force()
             .nodes(nodes)
             .size([width, height])
             .gravity(.01)
             .charge(0)
-            .on("tick", tick)
+            .on('tick', tick)
             .start();
 
-        var svg = d3.select(target).append("svg").classed(className, true)
-            .attr("width", width)
-            .attr("height", height);
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-15, 0])
+            .html(tooltipController);
 
-        var circle = svg.selectAll("circle."+className)
+        var displayTip = (function(d) {
+            return function(d) {
+                var cx = d3.select(this).attr('cx'),
+                    presumedWidth = 140;
+                if(cx < presumedWidth) tip.direction('e').offset([0, 10]);
+                else if(cx > window.innerWidth-presumedWidth) tip.direction('w').offset([0, -10]);
+                else tip.direction('n').offset([-15, 0]);
+                tip.show(d);
+            }
+        })();
+
+        var svg = d3.select(target).append('svg').classed(className, true)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('preserveAspectRatio', 'xMinYMin meet')
+            .attr("viewBox", '0 0 '+width+' '+height);
+
+        svg.call(tip);
+
+        var circle = svg.selectAll('circle.' + className)
             .data(nodes)
             .enter().append('circle').classed(className, true)
-            .attr("r", function(d) { return d.radius; })
-            .style("fill", function(d) { return color(d.clusterid); })
+            .attr('r', function (d) {
+                return d.radius;
+            })
+            .style('fill', function (d) {
+                return color(d.clusterid);
+            })
             .call(force.drag)
-            //.on('mousedown.drag', null)
+            .on('mousedown.drag', null)
             .on('click', clickController);
 
+        // enable tooltip if window is 500px or larger
+        if(window.innerWidth >= 500) {
+            circle.on('mouseover', displayTip).on('mouseout', tip.hide);
+        }
+
+        // enable/disable tooltips on a breaking point
+        var winWidthBefore = window.innerWidth, winWidthNow;
+        window.addEventListener('resize', function(){
+            winWidthNow = window.innerWidth;
+           if(window.innerWidth < 500) {
+               circle.on('mouseover', null).on('mouseout', null);
+           } else if(winWidthBefore < 500 && winWidthNow >= 500) {
+               circle.on('mouseover', displayTip).on('mouseout', tip.hide);
+           }
+            winWidthBefore = winWidthNow;
+        });
+
+        // stops the force after initial setup
+        setTimeout(function () {
+            force.on('tick', null).stop();
+        }, 15000);
 
         function tick(e) {
             circle
                 .each(cluster(10 * e.alpha * e.alpha, clusters))
                 .each(collide(.5, nodes))
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
+                .attr('cx', function (d) {
+                    return d.x;
+                })
+                .attr('cy', function (d) {
+                    return d.y;
+                });
         }
 
     }
+
     // Move d to be adjacent to the cluster node.
     function cluster(alpha, clusters) {
-        return function(d) {
+        return function (d) {
             var cluster = clusters[d.clusterid],
                 k = 1;
 
@@ -273,13 +294,13 @@ window.addEventListener('load', function(){
     // Resolves collisions between d and all other circles.
     function collide(alpha, nodes) {
         var quadtree = d3.geom.quadtree(nodes);
-        return function(d) {
+        return function (d) {
             var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
                 nx1 = d.x - r,
                 nx2 = d.x + r,
                 ny1 = d.y - r,
                 ny2 = d.y + r;
-            quadtree.visit(function(quad, x1, y1, x2, y2) {
+            quadtree.visit(function (quad, x1, y1, x2, y2) {
                 if (quad.point && (quad.point !== d)) {
                     var x = d.x - quad.point.x,
                         y = d.y - quad.point.y,
@@ -297,6 +318,5 @@ window.addEventListener('load', function(){
             });
         };
     }
-
 
 });

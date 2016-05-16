@@ -63,7 +63,6 @@ gaRestClient = {
 };
 
 xmlLoader = {
-    output: null,
     load: function(xmlFile, callback) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -99,9 +98,14 @@ dataManager = {
     checkDataState: function() {
         if(this.dataCantons && this.dataHydropower && this.dataWindenergy && this.dataNuclearenergy)
         {
+            console.log('Data is loaded');
             this.dataState = 'ready';
             window.dispatchEvent(this.event);
         }
+        // if (this.dataCantons) console.log('cantons loaded');
+        // if (this.dataHydropower) console.log('hydropower loaded');
+        // if (this.dataWindenergy) console.log('wind loaded');
+        // if (this.dataNuclearenergy) console.log('nuclear loaded');
     },
     storeCantonsData: function(data) {
         this.dataState = 'storing';
@@ -140,6 +144,9 @@ utility = {
         var east = coordinate[0] - 2000000;
         var north = coordinate[1] - 1000000;
         return [east, north];
+    },
+    round: function (num) {
+        return Math.round(num*1000)/1000;
     }
 };
 
@@ -148,7 +155,7 @@ utility = {
 
     window.addEventListener('load', function() {
         document.getElementById('data').innerHTML = '<h1>Processing</h1>';
-       console.log('Document loaded');
+        console.log('Document loaded');
     });
 
     function callbackHydro(data) {
@@ -169,9 +176,11 @@ utility = {
     xmlLoader.load('data/source/nuclearpower.xml', callbackNuclear);
     xmlLoader.load('data/source/statisticshydropower2014.xml', callbackHydro);
     xmlLoader.load('data/source/cantons.xml', callbackOutput);
-    xmlLoader.load('data/source/windenergyplants.xtf', callbackWind);
+    xmlLoader.load('data/source/windenergyplantsXML.xml', callbackWind);
 
     function buildDataView() {
+
+        console.log('DataView build started');
 
         var cantonsName = dataManager.accessData(dataManager.dataCantons, 'Name');
         var cantonsAbbr = dataManager.accessData(dataManager.dataCantons, 'Abbr');
@@ -190,6 +199,7 @@ utility = {
         var windfacilities = dataManager.dataWindenergy.getElementsByTagName('Windenergyplants_V1.Plant.Facility');
         var windplants = [];
 
+        // Wind
         Array.from(windfacilities).forEach(function(item) {
             var E = item.getElementsByTagName('C1')[0].childNodes[0].nodeValue;
             var N = item.getElementsByTagName('C2')[0].childNodes[0].nodeValue;
@@ -207,7 +217,7 @@ utility = {
                     canton: null,
                     coordinate: coordCH1903,
                     // kWh
-                    production: utility.kWhToGWh(itemProd[0].childNodes[0].nodeValue)
+                    production: utility.round(utility.kWhToGWh(itemProd[0].childNodes[0].nodeValue))
                 });
             }
         });
@@ -262,7 +272,9 @@ utility = {
 
         }
 
+        
         for(var i = 0; i < dataView.cantons.length; i++) {
+            // Wasser
             dataView.cantons[i].hydropowerplants = [];
             for(var j = 0; j < rowsHydro.length; j++) {
                 var data = rowsHydro[j].getElementsByTagName('Data');
@@ -270,11 +282,14 @@ utility = {
                     && data[6].childNodes[0].nodeValue == 'im Normalbetrieb' && data[13].childNodes[0].nodeValue > 0) {
                     dataView.cantons[i].hydropowerplants.push({
                         id: data[0].childNodes[0].nodeValue,
+                        name: data[2].childNodes[0].nodeValue,
+                        type: 'Wasserkraftwerk',
                         // unit: GWh
-                        production: data[13].childNodes[0].nodeValue
-                    })
+                        production: utility.round(data[13].childNodes[0].nodeValue)
+                    });
                 }
             }
+            // Kernkraft
             dataView.cantons[i].nuclearpowerplants = [];
             for(var y = 0; y < kkws.length; y++) {
                 data = kkws[y];
@@ -282,8 +297,10 @@ utility = {
                 if(canton == dataView.cantons[i].name) {
                     dataView.cantons[i].nuclearpowerplants.push({
                         id: data.getElementsByTagName('id')[0].childNodes[0].nodeValue,
+                        name: data.getElementsByTagName('name')[0].childNodes[0].nodeValue,
+                        type: 'Kernkraftwerk',
                         // unit: GWh
-                        production: data.getElementsByTagName('production')[0].childNodes[0].nodeValue
+                        production: utility.round(data.getElementsByTagName('production')[0].childNodes[0].nodeValue)
                     });
                 }
             }
@@ -295,15 +312,15 @@ utility = {
                 windplants.forEach(function(plant){
                    if(canton.abbr == plant.canton) canton.windenergyplants.push({
                        id: plant.id,
+                       name: plant.name,
+                       type: 'Windenergieanlage',
                        production: plant.production
                    });
                 });
             });
         }
         function eval() {
-            dataView.globalhydropowerproduction = 0;
-            dataView.globalnuclearenergyprodution = 0;
-            dataView.globalwindenergyproduction = 0;
+            var globalhydropowerproduction = 0, globalnuclearenergyprodution = 0, globalwindenergyproduction = 0;
             dataView.cantons.forEach(function(canton) {
                 canton.hydropowerproduction = 0;
                 canton.nuclearenergyproduction = 0;
@@ -317,17 +334,27 @@ utility = {
                 canton.windenergyplants.forEach(function(plant){
                     canton.windenergyproduction += Number(plant.production);
                 });
-                dataView.globalhydropowerproduction += Number(canton.hydropowerproduction);
-                dataView.globalnuclearenergyprodution += Number(canton.nuclearenergyproduction);
-                dataView.globalwindenergyproduction += Number(canton.windenergyproduction);
+                canton.hydropowerproduction = utility.round(canton.hydropowerproduction);
+                canton.nuclearenergyproduction = utility.round(canton.nuclearenergyproduction);
+                canton.windenergyproduction = utility.round(canton.windenergyproduction);
+                globalhydropowerproduction += Number(canton.hydropowerproduction);
+                globalnuclearenergyprodution += Number(canton.nuclearenergyproduction);
+                globalwindenergyproduction += Number(canton.windenergyproduction);
 
                 var hprod = dataViewUtility.getCantonalMaxProdFacility(canton);
                 canton.highestprodfacility = hprod ? hprod : null;
             });
+            dataView.globalhydropowerproduction = utility.round(globalhydropowerproduction);
+            dataView.globalnuclearenergyprodution = utility.round(globalnuclearenergyprodution);
+            dataView.globalwindenergyproduction = utility.round(globalwindenergyproduction);
+
             dataView.valuedomain = [dataViewUtility.globalMin(dataView), dataViewUtility.globalMax(dataView)];
             dataView.globalHPFacilityHydro = dataViewUtility.getMaxProdFacility(dataViewUtility.createJointArray(dataView, 'hydropowerplants'));
             dataView.globalHPFacilityNuclear = dataViewUtility.getMaxProdFacility(dataViewUtility.createJointArray(dataView, 'nuclearpowerplants'));
             dataView.globalHPFacilityWind = dataViewUtility.getMaxProdFacility(dataViewUtility.createJointArray(dataView, 'windenergyplants'));
+            dataView.annualenergyproduction = 66000;
+            dataView.asat = 2015;
+
         }
         function clean() {
             dataView.cantons.forEach(function(canton){
@@ -349,8 +376,6 @@ utility = {
             if (document.readyState === 'complete') printDataView();
             else window.addEventListener('load', printDataView);
         });
-
-
 
     }
 

@@ -4,10 +4,10 @@
 
 window.addEventListener('load', function(){
 
-    var width = window.innerWidth-20,
-        height = window.innerHeight-20,
-        padding = 5, // separation between same-color circles
-        clusterPadding = 30, // separation between different-color circles
+    var width = 1000,
+        height = 1000,
+        padding = 2, // separation between same-color circles
+        clusterPadding = 12, // separation between different-color circles
         maxRadius = 12;
 
     // Reihenfolge der Kantone:
@@ -43,10 +43,11 @@ window.addEventListener('load', function(){
 
             function createNode(pivot, plant) {
                 var node = dataViewUtility.clone(plant);
+                node.cluster = pivot.id;
                 node.clusterid = clusterid;
                 node.radius = l_converter(plant.production);
-                //node.x = Math.cos(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + width / 2 + Math.random();
-                //node.y = Math.sin(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + height / 2 + Math.random();
+                // node.x = Math.cos(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + width / 2 + Math.random();
+                // node.y = Math.sin(clusterid / expectedNumClusters * 2 * Math.PI) * 200 + height / 2 + Math.random();
                 nodes.push(node);
                 if(node.id == pivot.id) clusters.push(node);
             }
@@ -67,41 +68,84 @@ window.addEventListener('load', function(){
                 createNode(data.globalHPFacilityNuclear, plant);
             });
 
+            console.log(clusters);
+
+
+            function createLegend(clusters) {
+                var html = '', targetelem = document.querySelector('#legend-cont');
+                clusters.forEach(function (cluster) {
+                    var bgcolor = color(cluster.clusterid);
+                    var descr = cluster.type;
+                    html += '<li><span style="background-color: ' + bgcolor + ';"></span>' + descr + '</li>'
+                });
+
+                targetelem.innerHTML = html;
+            }
 
             var clickController = (function(d){
                 var currElement, prevElement, prevElementColor,
-                    highlightColor = '#000', infoEle = document.querySelector(target+' #info');
+                    highlightColor = '#2299dd', infoEle = document.querySelector('#descr'),
+                    backupEle = document.querySelector('#backup-descr');
 
-                return function(d){
-                    if(prevElement) {
+                return function (d) {
+                    if (prevElement) {
                         d3.select(prevElement).style('fill', prevElementColor);
-                        if(prevElement == this) {
+                        if (prevElement == this) {
                             prevElement = null;
                             infoEle.innerHTML = '';
+                            backupEle.innerHTML = '';
                             return
                         }
                     }
                     prevElementColor = d3.select(this).style('fill');
                     d3.select(this).style("fill", highlightColor);
                     prevElement = this;
-                    var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
-                    infoEle.innerHTML =
-                        'Node Info:<br>' + 'Plant ID: ' + d.id + '<br>' + 'Production: ' + d.production + 'GWh';
+                    var energyType = '';
+                    var totalProd;
+                    if(d.type == 'Wasserkraftwerk') { energyType = 'Wasserkraft'; totalProd = data.globalhydropowerproduction }
+                    else if(d.type == 'Kernkraftwerk') { energyType = 'Kernkraft'; totalProd = data.globalnuclearenergyprodution }
+                    else if(d.type == 'Windenergieanlage') { energyType = 'Windkraft'; totalProd = data.globalwindenergyproduction }
+                    var cantonInfo = dataViewUtility.getCantonByPlantId(data, d.id, true);
+                    var percentage = Math.round((d.production/totalProd)*10000)/100;
+                    percentage = (percentage < 1) ? Math.round((d.production/totalProd)*100000)/1000 : percentage
+                    var html = '<strong>'+energyType+'</strong><br>'
+                        + 'Ganzjährliche Produktion von '+energyType+':<br><strong>' + totalProd + '</strong> GWh<br>'
+                        + Math.round((totalProd/data.annualenergyproduction)*1000)/10 
+                        + '% der schweizerischen Energieproduktion (Net ' + data.asat + ')<br>'
+                        + '<br>'
+                        +'<strong>' + d.name + '</strong><br>'
+                        + 'Produktion: <strong>' + d.production + '</strong> GWh<br>'
+                        + percentage + '% der Gesamtproduktion von ' + energyType;
+                    infoEle.innerHTML = backupEle.innerHTML = html;
                 }
             })();
 
-            configuration2 = createConfiguration(2, target, classN, nodes, clusters, clickController);
-            //visualise(target, classN, nodes, clusters, clickController);
+            var tooltipController = (function (d) {
+
+                return function (d) {
+                    return d.type +' '+ d.name + '<br>' + d.production+' GWh';
+                }
+
+            })();
+
+            configuration1 = createConfiguration(target, classN, nodes, clusters, clickController, tooltipController);
+
+            visualise(configuration1);
+            createLegend(clusters);
 
         })();
 
-        var vis = visualise(configuration2);
-
-
     });
 
-    function createConfiguration(configID, target, className, nodes, clusters, clickcontroller) {
-        return {configID: configID, target: target, className: className, nodes: nodes, clusters: clusters, clickcontroller: clickcontroller};
+    function createConfiguration(target, className, nodes, clusters, clickcontroller, tooltipController) {
+        return {
+            target: target,
+            className: className,
+            nodes: nodes,
+            clusters: clusters,
+            clickcontroller: clickcontroller,
+            tooltipcontroller: tooltipController
+        };
     }
 
     function visualise(configuration) {
@@ -109,49 +153,105 @@ window.addEventListener('load', function(){
             className = configuration.className,
             nodes = configuration.nodes,
             clusters = configuration.clusters,
-            clickController = configuration.clickcontroller;
+            clickController = configuration.clickcontroller,
+            tooltipController = configuration.tooltipcontroller;
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
             .sort(null)
             .size([width, height])
-            .children(function(d) { return d.values; })
-            .value(function(d) { return d.radius * d.radius; })
-            .nodes({values: d3.nest()
-                .key(function(d) { return d.cluster; })
-                .entries(nodes)});
+            .children(function (d) {
+                return d.value;
+            })
+            .value(function (d) {
+                return d.radius * d.radius;
+            })
+            .nodes({
+                values: d3.nest()
+                    .key(function (d) {
+                        return d.clusterid;
+                    })
+                    .entries(nodes)
+            });
 
         var force = d3.layout.force()
             .nodes(nodes)
             .size([width, height])
             .gravity(.01)
             .charge(0)
-            .on("tick", tick)
+            .on('tick', tick)
             .start();
 
-        var svg = d3.select(target).append("svg").classed(className, true)
-            .attr("width", width)
-            .attr("height", height);
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-15, 0])
+            .html(tooltipController);
 
-        var circle = svg.selectAll("circle."+className)
+        var displayTip = (function(d) {
+            return function(d) {
+                var cx = d3.select(this).attr('cx'),
+                    presumedWidth = 120;
+                if(cx < presumedWidth) tip.direction('e').offset([0, 10]);
+                else if(cx > window.innerWidth-presumedWidth) tip.direction('w').offset([0, -10]);
+                else tip.direction('n').offset([-15, 0]);
+                tip.show(d);
+            }
+        })();
+
+        var svg = d3.select(target).append('svg').classed(className, true)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('preserveAspectRatio', 'xMinYMin meet')
+            .attr("viewBox", '0 0 '+width+' '+height);
+
+        svg.call(tip);
+
+        var circle = svg.selectAll('circle.' + className)
             .data(nodes)
             .enter().append('circle').classed(className, true)
-            .attr("r", function(d) { return d.radius; })
-            .style("fill", function(d) { return color(d.clusterid); })
+            .attr('r', function (d) {
+                return d.radius;
+            })
+            .style('fill', function (d) {
+                return color(d.clusterid);
+            })
             .call(force.drag)
-            //.on('mousedown.drag', null)
+            .on('mousedown.drag', null)
             .on('click', clickController);
 
+        // enable tooltip if window is 500px or larger
+        if(window.innerWidth >= 500) {
+            circle.on('mouseover', displayTip).on('mouseout', tip.hide);
+        }
+
+        // enable/disable tooltips on a breaking point
+        var winWidthBefore = window.innerWidth, winWidthNow;
+        window.addEventListener('resize', function(){
+            winWidthNow = window.innerWidth;
+            if(window.innerWidth < 500) {
+                circle.on('mouseover', null).on('mouseout', null);
+            } else if(winWidthBefore < 500 && winWidthNow >= 500) {
+                circle.on('mouseover', displayTip).on('mouseout', tip.hide);
+            }
+            winWidthBefore = winWidthNow;
+        });
+
+        // stops the force after initial setup
+        setTimeout(function () {
+            force.on('tick', null).stop();
+        }, 25000);
 
         function tick(e) {
             circle
                 .each(cluster(10 * e.alpha * e.alpha, clusters))
                 .each(collide(.5, nodes))
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
+                .attr('cx', function (d) {
+                    return d.x;
+                })
+                .attr('cy', function (d) {
+                    return d.y;
+                });
         }
-
-        return {configID: configuration.configID, force: force, svg: svg, circle: circle};
 
     }
 
@@ -165,6 +265,7 @@ window.addEventListener('load', function(){
             if (cluster === d) {
                 cluster = {x: width / 2, y: height / 2, radius: -d.radius};
                 k = .1 * Math.sqrt(d.radius);
+                //return d;
             }
 
             var x = d.x - cluster.x,

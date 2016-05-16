@@ -1,3 +1,6 @@
+@import "../fonts/fonts.css";
+@import "globals";
+
 * {
   padding: 0;
   margin: 0;
@@ -9,18 +12,20 @@
 html, body {
   height: 100%;
   width: 100%;
-  font-family: sans-serif;
+  font-family: bellotaregular ,archisticonormal ,archisticobold, sans-serif;
+  color: $blue1;
 }
 
-#vis1, #vis2 {
-  position: relative;
-}
+a {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
 
-#info {
-  position: absolute;
-  right: 0;
-  top: 40%;
-  width: 20%;
-  height: 20%;
-  border: 2px solid black;
+  &:hover, &:focus {
+    color: $blue2;
+    transition: color 0.5s ease;
+  }
+}
+#footer {
+  height: 4rem;
 }

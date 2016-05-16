@@ -8,19 +8,18 @@
     <!--    <link rel='stylesheet' href='css/nprogress.css'/>-->
     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>-->
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>-->
-    <!--    <script src="/js/tipso.min.js"></script>-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>-->
+<!--    <script src="/js/tipso.min.js"></script>-->
     <!--    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js'></script>-->
     <!--    <script src='js/modernizr.js'></script>-->
     <!--    <script src='js/nprogress.js'></script>-->
     <!--    <script src='js/dynamicpage.js'></script>-->
     <script src="js/d3-tip.js"></script>
     <script src="js/dataviewutility.js"></script>
-    <script src="js/visualization2.js"></script>
+    <script src="js/visualization.js"></script>
 
 </head>
 <body>
-
 <!-- The overlay -->
 <div id="nav" class="overlay">
 
@@ -41,9 +40,9 @@
 </nav>
 
 
-<h1>Produktion von Wasserkraft, Kernkraft und Windenergie</h1>
+<h1>Energieproduktion der Kantone</h1>
 <div id="content">
-
+    
     <div id="info-flex">
         <fieldset id="legend">
             <legend><h3>Legende</h3></legend>
@@ -51,29 +50,28 @@
             </ul>
         </fieldset>
         <fieldset id="info">
-            <legend><h3>Info</h3></legend>
-            <div id="info-cont">
-                Diese Visualisierung zeigt eine Gruppierung aller Wasser-, Wind- und Kernkraftwerke der Schweiz,
-                wobei jeder Kreis ein Kraftwerk darstellt. Die Grösse eines Kreises widerspiegelt die
-                Produktionsmenge des Kraftwerks.<br>
-                <br>
-                Tippe auf einen Kreis, um mehr über das Kraftwerk zu erfahren.
-            </div>
+                <legend><h3>Info</h3></legend>
+                <div id="info-cont">
+                    Diese Visualisierung zeigt die Kraftwerke eines Kantons, wobei jeder Kreis ein Kraftwerk darstellt.
+                    Die Grösse eines Kreises widerspiegelt die Produktionsmenge des Kraftwerks.<br>
+                    <br>
+                    Tippe auf einen Kreis, um mehr über das Kraftwerk zu erfahren.
+                </div>
         </fieldset>
         <fieldset id="backup-descr"></fieldset>
 
     </div>
+    
 
+    
+<!--<a href="vis2.php">Produktion von Wasserkraft, Kernkraft und Windenergie</a>-->
 
-
-    <!--<a href="vis2.php">Produktion von Wasserkraft, Kernkraft und Windenergie</a>-->
-
-    <div id="vis-cont">
-        <div class="spacer"></div>
-        <div id="vis" class="vis2"></div>
-        <div id="descr"></div>
-    </div>
+<div id="vis-cont">
+    <div class="spacer"></div>
+    <div id="vis"></div>
+    <div id="descr"></div>
 </div>
+    </div>
 
 <script>
     /* Open */
@@ -88,5 +86,4 @@
 </script>
 
 </body>
-<!--<div id="nprogress"></div>-->
 </html>

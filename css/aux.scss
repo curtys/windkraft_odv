@@ -1,0 +1,95 @@
+@import "globals";
+@import "overlay";
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+  padding-top: 3rem;
+}
+
+
+#content {
+  padding-top: 1rem;
+  width: 50rem;
+  margin: 0 auto;
+
+  & a:before {
+    content: '\027A4';
+  }
+
+  & section {
+    padding-top: 2rem;
+  }
+
+  & article {
+    margin-top: 1.5rem;
+  }
+
+}
+
+pre {
+  font-family: "Courier 10 Pitch", Courier, monospace;
+  font-size: 95%;
+  line-height: 150%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+}
+
+code {
+  font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+  font-size: 95%;
+  line-height: 150%;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  color: $blue2;
+}
+
+#content code {
+  display: block;
+  padding: 0.5em 1em;
+  //border: 1px solid #bebab0;
+  border: 2px solid $blue1;
+  border-radius: 2px;
+}
+
+table {
+  width:100%;
+  border: 2px solid $blue1;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid $blue1;
+  border-collapse: collapse;
+  padding: 1.2em;
+  text-align: left;
+}
+th {
+  color: $blue2;
+  font-size: 1.1em;
+  //background: $blue1;
+}
+tr td:first-of-type {
+  font-weight: bold;
+}
+
+
+@media only screen and (max-width: 1000px) {
+  h1 {
+    padding-top: 4rem;
+    font-size: 2.5em;
+  }
+  #content {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 800px) {
+  th, td {
+    padding: 0.5em;
+  }
+}

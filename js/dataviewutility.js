@@ -39,6 +39,18 @@ dataViewUtility = {
 
         return faHydro || faNuclear || faWind;
     },
+    getFacilityType: function(view, facility) {
+        var type;
+        view.cantons.some(function(canton) {
+            var faHydro = canton.hydropowerplants.find(function(o){ return o.id == facility.id; }),
+                  faNuclear = canton.nuclearpowerplants.find(function(o){ return o.id == facility.id; }),
+                  faWind = canton.windenergyplants.find(function(o){ return o.id == facility.id; });
+            if(faHydro) { type = 'Wasserkraftwerk'; return true; }
+            if(faNuclear) { type = 'Kernkraftwerk'; return true; }
+            if(faWind) { type = 'Windenergieanlage'; return true; }
+        });
+        return type;
+    },
     globalMin: function(obj) {
         var localmin = [];
             obj.cantons.forEach(function (canton) {
@@ -71,6 +83,26 @@ dataViewUtility = {
                 }
                 result = canton;
                 return true;
+            }
+        });
+        return result;
+    },
+    getCantonByPlantId: function(view, plantId, condensed) {
+        condensed = (typeof condensed === 'undefined') ? false : condensed;
+        var result;
+        view.cantons.some(function(canton) {
+            var faHydro = canton.hydropowerplants.find(function(o){ return o.id == plantId; }),
+                faNuclear = canton.nuclearpowerplants.find(function(o){ return o.id == plantId; }),
+                faWind = canton.windenergyplants.find(function(o){ return o.id == plantId; });
+            if(faHydro || faNuclear || faWind) {
+                if(condensed) {
+                    var cantonCondensed = {name: canton.name, abbr: canton.abbr, hydropowerproduction: canton.hydropowerproduction,
+                        nuclearenergyproduction: canton.nuclearenergyproduction, windenergyproduction: canton.windenergyproduction};
+                    result = cantonCondensed;
+                    return true;
+                }
+                result = canton;
+                return true
             }
         });
         return result;

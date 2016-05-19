@@ -25,17 +25,7 @@ window.addEventListener('load', function () {
         "#68bd74", "#e09d60", "#1069cd", "#d50438", "#c03d17", "#79b6af", "#517430", "#db9b94", "#095cf8", "#b1b045",
         "#c0a4a9", "#bc01c1", "#906033", "#e49c3f", "#8e4db9", "#bb3a64", "#cb1478", "#776b09", "#94b743", "#763eff",
         "#1a7a3e", "#617046", "#915c62", "#ec8dc0", "#ba22ac", "#437461", "#913ddc", "#4bbda8"]);
-
-
-    //var color = d3.scale.category20c()
-    //    .domain(d3.range(clusters.length));
-
-    //var drag_behavior = d3.behavior.drag()
-    //    .on("drag", function() {
-    //            // cancel the drag event
-    //            drag_behavior.on("drag", null);
-    //
-    //    });
+    
 
     d3.json('data/data.json', function (err, json) {
 
@@ -125,8 +115,11 @@ window.addEventListener('load', function () {
                         + '<br>'
                         + '<strong>' + d.type+' '+d.name+'</strong><br>'
                         + 'Produktion: ' + d.production + ' GWh<br>'
-                        + Math.round((d.production/total)*1000)/10+'% der kantonalen Produktion';
+                        + Math.round((d.production/total)*1000)/10+'% der kantonalen Produktion<br>';
+                        // + '<br><a href="#map" class="show-loc">&#10148; Zeige auf der Karte</a>';
                     infoEle.innerHTML = backupEle.innerHTML = html;
+                    
+
                 }
             })();
 

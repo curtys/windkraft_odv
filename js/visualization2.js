@@ -68,9 +68,6 @@ window.addEventListener('load', function(){
                 createNode(data.globalHPFacilityNuclear, plant);
             });
 
-            console.log(clusters);
-
-
             function createLegend(clusters) {
                 var html = '', targetelem = document.querySelector('#legend-cont');
                 clusters.forEach(function (cluster) {

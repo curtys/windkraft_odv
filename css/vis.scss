@@ -147,6 +147,13 @@ h1 {
   }
 }
 
+// map
+iframe {
+  border: none;
+  height: 500px;
+  width: 100%;
+}
+
 @media only screen and (max-width: 1200px) {
 .spacer {display: none}
   #vis-cont {

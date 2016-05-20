@@ -1,5 +1,37 @@
 
+$font_size_base: 16px;
+
 /* colors */
 $blue1: #2299dd;
 $blue2: #056197;
 $white1: #fff;
+
+@function calculateRem($size) {
+  $remSize: $size / $font_size_base;
+  @return $remSize * 1rem;
+}
+
+@mixin pixel-fallback($property, $size) {
+  #{$property}: $size;
+  #{$property}: calculateRem($size);
+}
+
+@mixin font-size($size) {
+  @include pixel-fallback(font-size, $size);
+}
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+@mixin transform($args...) {
+  -webkit-transform: $args;
+  -moz-transform: $args;
+  -ms-transform: $args;
+  -o-transform: $args;
+  transform: $args;
+}

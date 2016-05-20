@@ -67,6 +67,7 @@ window.addEventListener('load', function(){
             nuclearplants.forEach(function(plant) {
                 createNode(data.globalHPFacilityNuclear, plant);
             });
+            
 
             function createLegend(clusters) {
                 var html = '', targetelem = document.querySelector('#legend-cont');
@@ -104,7 +105,7 @@ window.addEventListener('load', function(){
                     else if(d.type == 'Windenergieanlage') { energyType = 'Windkraft'; totalProd = data.globalwindenergyproduction }
                     var cantonInfo = dataViewUtility.getCantonByPlantId(data, d.id, true);
                     var percentage = Math.round((d.production/totalProd)*10000)/100;
-                    percentage = (percentage < 1) ? Math.round((d.production/totalProd)*100000)/1000 : percentage
+                    percentage = (percentage < 1) ? Math.round((d.production/totalProd)*100000)/1000 : percentage;
                     var html = '<strong>'+energyType+'</strong><br>'
                         + 'Ganzjährliche Produktion von '+energyType+':<br><strong>' + totalProd + '</strong> GWh<br>'
                         + Math.round((totalProd/data.annualenergyproduction)*1000)/10 
@@ -114,7 +115,7 @@ window.addEventListener('load', function(){
                         + 'Produktion: <strong>' + d.production + '</strong> GWh<br>'
                         + percentage + '% der Gesamtproduktion von ' + energyType;
                     infoEle.innerHTML = backupEle.innerHTML = html;
-                }
+                };
             })();
 
             var tooltipController = (function (d) {
@@ -125,33 +126,15 @@ window.addEventListener('load', function(){
 
             })();
 
-            configuration1 = createConfiguration(target, classN, nodes, clusters, clickController, tooltipController);
-
-            visualise(configuration1);
+            visualise(target, classN, nodes, clusters, clickController, tooltipController);
             createLegend(clusters);
 
         })();
 
     });
 
-    function createConfiguration(target, className, nodes, clusters, clickcontroller, tooltipController) {
-        return {
-            target: target,
-            className: className,
-            nodes: nodes,
-            clusters: clusters,
-            clickcontroller: clickcontroller,
-            tooltipcontroller: tooltipController
-        };
-    }
+    function visualise(target, className, nodes, clusters, clickController, tooltipController) {
 
-    function visualise(configuration) {
-        var target = configuration.target,
-            className = configuration.className,
-            nodes = configuration.nodes,
-            clusters = configuration.clusters,
-            clickController = configuration.clickcontroller,
-            tooltipController = configuration.tooltipcontroller;
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
@@ -236,7 +219,7 @@ window.addEventListener('load', function(){
         // stops the force after initial setup
         setTimeout(function () {
             force.on('tick', null).stop();
-        }, 25000);
+        }, 40000);
 
         function tick(e) {
             circle

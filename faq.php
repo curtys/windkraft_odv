@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="utf-8">
-    <title>Windkraft</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/aux.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Open Data Visualisierung der Stromproduktion von Wasser-, Wind- und Kernkraftwerken" >
+    <title>Energieproduktion der Schweiz - FAQ</title>
+    <link rel="stylesheet" type="text/css" href="css/main.min.css">
+    <link rel="stylesheet" type="text/css" href="css/aux.min.css">
 
 </head>
 <body>

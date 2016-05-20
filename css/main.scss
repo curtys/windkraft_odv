@@ -23,9 +23,9 @@ a {
 
   &:hover, &:focus {
     color: $blue2;
-    transition: color 0.5s ease;
+    @include transition(color, 0.5s, ease);
   }
 }
 #footer {
-  height: 4rem;
+  @include pixel-fallback("height", 4*$font_size_base);
 }

@@ -25,7 +25,8 @@ window.addEventListener('load', function () {
         "#68bd74", "#e09d60", "#1069cd", "#d50438", "#c03d17", "#79b6af", "#517430", "#db9b94", "#095cf8", "#b1b045",
         "#c0a4a9", "#bc01c1", "#906033", "#e49c3f", "#8e4db9", "#bb3a64", "#cb1478", "#776b09", "#94b743", "#763eff",
         "#1a7a3e", "#617046", "#915c62", "#ec8dc0", "#ba22ac", "#437461", "#913ddc", "#4bbda8"]);
-    
+
+
 
     d3.json('data/data.json', function (err, json) {
 
@@ -72,15 +73,13 @@ window.addEventListener('load', function () {
                 clusterid++;
             });
 
-            console.log(clusters);
-
             function createLegend(clusters) {
                 var html = '', targetelem = document.querySelector('#legend-cont');
                 clusters.forEach(function (cluster) {
                     var bgcolor = color(cluster.clusterid);
                     var clusterInfo = dataViewUtility.getCantonByAbbr(data, cluster.cluster, true);
                     var descr = clusterInfo.name;
-                    html += '<li><span style="background-color: ' + bgcolor + ';"></span>' + descr + '</li>'
+                    html += '<li><span style="background-color: ' + bgcolor + ';"></span>' + descr + '</li>';
                 });
 
                 targetelem.innerHTML = html;
@@ -98,7 +97,7 @@ window.addEventListener('load', function () {
                             prevElement = null;
                             infoEle.innerHTML = '';
                             backupEle.innerHTML = '';
-                            return
+                            return;
                         }
                     }
                     prevElementColor = d3.select(this).style('fill');
@@ -120,44 +119,25 @@ window.addEventListener('load', function () {
                     infoEle.innerHTML = backupEle.innerHTML = html;
                     
 
-                }
+                };
             })();
 
             var tooltipController = (function (d) {
 
                 return function (d) {
                     return d.type +' '+ d.name + '<br>' + d.production+' GWh';
-                }
+                };
 
             })();
 
-            configuration1 = createConfiguration(target, classN, nodes, clusters, clickController, tooltipController);
-
-            visualise(configuration1);
+            visualise(target, classN, nodes, clusters, clickController, tooltipController);
             createLegend(clusters);
 
         })();
 
     });
 
-    function createConfiguration(target, className, nodes, clusters, clickcontroller, tooltipController) {
-        return {
-            target: target,
-            className: className,
-            nodes: nodes,
-            clusters: clusters,
-            clickcontroller: clickcontroller,
-            tooltipcontroller: tooltipController
-        };
-    }
-
-    function visualise(configuration) {
-        var target = configuration.target,
-            className = configuration.className,
-            nodes = configuration.nodes,
-            clusters = configuration.clusters,
-            clickController = configuration.clickcontroller,
-            tooltipController = configuration.tooltipcontroller;
+    function visualise(target, className, nodes, clusters, clickController, tooltipController) {
 
         // Use the pack layout to initialize node positions.
         d3.layout.pack()
@@ -180,7 +160,7 @@ window.addEventListener('load', function () {
         var force = d3.layout.force()
             .nodes(nodes)
             .size([width, height])
-            .gravity(.01)
+            .gravity(0.01)
             .charge(0)
             .on('tick', tick)
             .start();
@@ -198,7 +178,7 @@ window.addEventListener('load', function () {
                 else if(cx > window.innerWidth-presumedWidth) tip.direction('w').offset([0, -10]);
                 else tip.direction('n').offset([-15, 0]);
                 tip.show(d);
-            }
+            };
         })();
 
         var svg = d3.select(target).append('svg').classed(className, true)
@@ -242,12 +222,12 @@ window.addEventListener('load', function () {
         // stops the force after initial setup
         setTimeout(function () {
             force.on('tick', null).stop();
-        }, 15000);
+        }, 20000);
 
         function tick(e) {
             circle
                 .each(cluster(10 * e.alpha * e.alpha, clusters))
-                .each(collide(.5, nodes))
+                .each(collide(0.5, nodes))
                 .attr('cx', function (d) {
                     return d.x;
                 })
@@ -267,7 +247,7 @@ window.addEventListener('load', function () {
             // For cluster nodes, apply custom gravity.
             if (cluster === d) {
                 cluster = {x: width / 2, y: height / 2, radius: -d.radius};
-                k = .1 * Math.sqrt(d.radius);
+                k = 0.1 * Math.sqrt(d.radius);
             }
 
             var x = d.x - cluster.x,

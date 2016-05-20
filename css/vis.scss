@@ -2,7 +2,7 @@
 @import "overlay";
 
 h1 {
-  margin-top: 3rem;
+  @include pixel-fallback('margin-top', 3*$font_size_base);
   font-size: 3em;
   text-align: center;
 }
@@ -70,6 +70,8 @@ h1 {
   margin-right: 2em;
   display: flex;
   justify-content: center;
+  //width: 100%;
+  overflow: hidden;
 
   & #vis {
     display: flex;
@@ -89,21 +91,21 @@ h1 {
   }
 
   & .vis2 + #descr {
-    margin-left: -10em;
+    margin-left: -20em;
   }
 
-
 }
+
+// tooltip
 
 .d3-tip {
   line-height: 1;
   font-weight: bold;
-  //padding: 12px;
   padding: 1em;
   background: $blue1;
   color: $white1;
   border-radius: 3px;
-  webkit-box-shadow: 13px 17px 6px 0px rgba(50, 50, 50, 0.4);
+  -webkit-box-shadow: 13px 17px 6px 0px rgba(50, 50, 50, 0.4);
   -moz-box-shadow:    13px 17px 6px 0px rgba(50, 50, 50, 0.4);
   box-shadow:         13px 17px 6px 0px rgba(50, 50, 50, 0.4);
 
@@ -129,30 +131,17 @@ h1 {
     margin: -8px 2px 0;
     top: 50%;
     right: 50%;
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg);
+    @include transform(rotate(90deg));
   }
   &.w:after {
     margin: -8px 0 0 3px;
     top: 50%;
     left: 50%;
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    -o-transform: rotate(-90deg);
-    transform: rotate(-90deg);
+    @include transform(rotate(-90deg));
   }
 }
 
-// map
-iframe {
-  border: none;
-  height: 500px;
-  width: 100%;
-}
+// Media
 
 @media only screen and (max-width: 1200px) {
 .spacer {display: none}
@@ -162,8 +151,6 @@ iframe {
       min-width: 20em;
     }
   }
-
-
 }
 
 @media only screen and (max-width: 1000px) {
@@ -191,11 +178,9 @@ iframe {
   #descr {
     display: none;
   }
-
-
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 1000px) {
   #vis-cont {
     display: block;
     & #vis {

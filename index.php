@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="utf-8">
-    <title>Windkraft</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Open Data Visualisierung der Stromproduktion von Wasser-, Wind- und Kernkraftwerken" >
+    <title>Energieproduktion der Schweiz - Start</title>
+    <link rel="stylesheet" type="text/css" href="css/main.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.min.css">
 
 </head>
 <body>
@@ -12,9 +14,9 @@
     <h1>Energieproduktion der Schweiz</h1>
     <h2>Eine Visualisierung von Wind-, Wasser- und Kernkraftwerken</h2>
     <div id="features">
-        <div><?php echo file_get_contents('img/res/wind.svg'); ?></div>
-        <div><?php echo file_get_contents('img/res/water.svg'); ?></div>
-        <div><?php echo file_get_contents('img/res/nuclear.svg'); ?></div>
+        <div><?php echo file_get_contents('img/wind.svg'); ?></div>
+        <div><?php echo file_get_contents('img/water.svg'); ?></div>
+        <div><?php echo file_get_contents('img/nuclear.svg'); ?></div>
     </div>
 
 </header>
@@ -26,7 +28,7 @@
                 <h3>Energieproduktion der Kantone</h3>
                 <div class="inner-flex">
                     <div class="inner-item thumb">
-                        <?php echo file_get_contents('img/res/vis1.svg'); ?>
+                        <?php echo file_get_contents('img/vis1.svg'); ?>
                     </div>
                     <div class="inner-item">
                         Ein Vergleich der Elektrizitätsproduktion der verschiedenen Kantone.<br>

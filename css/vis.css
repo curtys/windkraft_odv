@@ -78,6 +78,7 @@ nav {
     top: 15px;
     right: 35px; } }
 h1 {
+  margin-top: 48px;
   margin-top: 3rem;
   font-size: 3em;
   text-align: center; }
@@ -123,7 +124,8 @@ h1 {
 #vis-cont {
   margin-right: 2em;
   display: flex;
-  justify-content: center; }
+  justify-content: center;
+  overflow: hidden; }
   #vis-cont #vis {
     display: flex;
     justify-content: center; }
@@ -134,7 +136,7 @@ h1 {
   #vis-cont #vis {
     flex-grow: 2; }
   #vis-cont .vis2 + #descr {
-    margin-left: -10em; }
+    margin-left: -20em; }
 
 .d3-tip {
   line-height: 1;
@@ -143,7 +145,7 @@ h1 {
   background: #2299dd;
   color: #fff;
   border-radius: 3px;
-  webkit-box-shadow: 13px 17px 6px 0px rgba(50, 50, 50, 0.4);
+  -webkit-box-shadow: 13px 17px 6px 0px rgba(50, 50, 50, 0.4);
   -moz-box-shadow: 13px 17px 6px 0px rgba(50, 50, 50, 0.4);
   box-shadow: 13px 17px 6px 0px rgba(50, 50, 50, 0.4); }
   .d3-tip:after {
@@ -179,11 +181,6 @@ h1 {
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg); }
 
-iframe {
-  border: none;
-  height: 500px;
-  width: 100%; }
-
 @media only screen and (max-width: 1200px) {
   .spacer {
     display: none; }
@@ -212,7 +209,7 @@ iframe {
 
   #descr {
     display: none; } }
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 1000px) {
   #vis-cont {
     display: block; }
     #vis-cont #vis {

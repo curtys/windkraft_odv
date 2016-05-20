@@ -54,8 +54,8 @@ gaRestClient = {
         this.find(this._layerBodId.wind, '', 'id', callback);
     },
     identifyCantonAtCoord: function(coordinate, callback) {
-        var query = this._mapServer+'/identify?geometryType=esriGeometryPoint&geometry='+coordinate.toString()
-            + '&imageDisplay=500,600,96&mapExtent=548945.5,147956,549402,148103.5&tolerance=0' +
+        var query = this._mapServer+'/identify?geometryType=esriGeometryPoint&geometry='+coordinate.toString() +
+            '&imageDisplay=500,600,96&mapExtent=548945.5,147956,549402,148103.5&tolerance=0' +
             '&layers=all:'+this._layerBodId.grenzeKanton+'&returnGeometry=false';
         this._execQuery(query, callback);
 
@@ -233,8 +233,7 @@ utility = {
         //asynchronous
         function contactServer(item) {
             gaRestClient.identifyCantonAtCoord(item.coordinate, function(data){
-                var cantonAbbr = data.results[0].attributes.ak;
-                item.canton = cantonAbbr;
+                item.canton = data.results[0].attributes.ak;
                 ctrCount++;
                 if(ctrCount+gaRestClient.failed == ctrExp) checkConsistency();
             });
@@ -292,7 +291,7 @@ utility = {
             // Kernkraft
             dataView.cantons[i].nuclearpowerplants = [];
             for(var y = 0; y < kkws.length; y++) {
-                data = kkws[y];
+                var data = kkws[y];
                 var canton = data.getElementsByTagName('canton')[0].childNodes[0].nodeValue;
                 if(canton == dataView.cantons[i].name) {
                     dataView.cantons[i].nuclearpowerplants.push({

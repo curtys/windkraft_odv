@@ -1,22 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="utf-8">
-    <title>Windkraft</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/vis.css">
-    <!--    <link rel='stylesheet' href='css/nprogress.css'/>-->
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Open Data Visualisierung der Stromproduktion von Wasser-, Wind- und Kernkraftwerken" >
+    <title>Energieproduktion der Schweiz</title>
+    <link rel="stylesheet" type="text/css" href="css/main.min.css">
+    <link rel="stylesheet" type="text/css" href="css/vis.min.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>-->
-    <!--    <script src="/js/tipso.min.js"></script>-->
-    <!--    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js'></script>-->
-    <!--    <script src='js/modernizr.js'></script>-->
-    <!--    <script src='js/nprogress.js'></script>-->
-    <!--    <script src='js/dynamicpage.js'></script>-->
-    <script src="js/d3-tip.js"></script>
-    <script src="js/dataviewutility.js"></script>
-    <script src="js/visualization2.js"></script>
+    <script src="js/d3-tip.min.js"></script>
+    <script src="js/dataviewutility.min.js"></script>
+    <script src="js/visualization2.min.js"></script>
 
 </head>
 <body>

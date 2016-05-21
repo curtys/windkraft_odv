@@ -42,7 +42,7 @@ window.addEventListener('load', function(){
 
 
             function createNode(pivot, plant) {
-                var node = dataViewUtility.clone(plant);
+                var node = plant;
                 node.cluster = pivot.id;
                 node.clusterid = clusterid;
                 node.radius = l_converter(plant.production);

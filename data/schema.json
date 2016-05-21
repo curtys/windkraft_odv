@@ -8,7 +8,8 @@
                     "id": "10650",
                     "name": "Rheinau",
                     "type": "Wasserkraftwerk",
-                    "production": 241.7
+                    "production": 241.7,
+                    "coordinate": [687400, 277120]
                 }, ...
             "nuclearpowerplants": [...],
             "windenergyplants": [...],
@@ -23,9 +24,10 @@
     "valuedomain": [0.002, 8598.52],
     "globalHPFacilityHydro": {
         "id": "504950",
-        "name": "Cleuson-Dixence",
+        "name": "Bieudron",
         "type": "Wasserkraftwerk",
-        "production": 1780
+        "production": 1780,
+        "coordinate": [585550, 114630]           
     },
     "globalHPFacilityNuclear": {...},
     "globalHPFacilityWind": {...},

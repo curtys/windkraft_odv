@@ -77,12 +77,16 @@
                     <td>Identifikationsnummer des Kraftwerks vom BFE.</td>
                 </tr>
                 <tr>
+                    <td>type</td>
+                    <td>Typ des Kraftwerks: Wasserkraftwerk, Kernkraftwerk oder Windenergieanlage</td>
+                </tr>
+                <tr>
                     <td>production</td>
                     <td>Gesamtjährliche Energieproduktion des Kraftwerkes in GWh</td>
                 </tr>
                 <tr>
-                    <td>type</td>
-                    <td>Typ des Kraftwerks: Wasserkraftwerk, Kernkraftwerk oder Windenergieanlage</td>
+                    <td>coordinate</td>
+                    <td>Ost und Nord Koordinaten in CH1903 Projektion</td>
                 </tr>
                 <tr>
                     <td>hydropowerproduction</td>

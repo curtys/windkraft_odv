@@ -141,9 +141,9 @@ utility = {
         return num / 1000000;
     },
     CH109plusToCH1903: function (coordinate) {
-        var east = coordinate[0] - 2000000;
-        var north = coordinate[1] - 1000000;
-        return [east, north];
+        var y = coordinate[0] - 2000000;
+        var x = coordinate[1] - 1000000;
+        return [y, x];
     },
     round: function (num) {
         return Math.round(num*1000)/1000;
@@ -174,7 +174,7 @@ utility = {
     //xmlLoader.load('data/hydropowerplants.xtf', callbackHydro);
     //xmlLoader.load('data/nuclearpowerplants.xtf', callbackNuclear);
     xmlLoader.load('data/source/nuclearpower.xml', callbackNuclear);
-    xmlLoader.load('data/source/statisticshydropower2014.xml', callbackHydro);
+    xmlLoader.load('data/source/hydropower2015.xml', callbackHydro);
     xmlLoader.load('data/source/cantons.xml', callbackOutput);
     xmlLoader.load('data/source/windenergyplantsXML.xml', callbackWind);
 
@@ -279,13 +279,18 @@ utility = {
                 var data = rowsHydro[j].getElementsByTagName('Data');
                 if(data.length > 0 && data[5].childNodes[0].nodeValue == (dataView.cantons[i].name).replace('. ', '.')
                     && data[6].childNodes[0].nodeValue == 'im Normalbetrieb' && data[13].childNodes[0].nodeValue > 0) {
+                    var coordN = Number(data[data.length-2].childNodes[0].nodeValue);
+                    var coordE = Number(data[data.length-1].childNodes[0].nodeValue);
                     dataView.cantons[i].hydropowerplants.push({
                         id: data[0].childNodes[0].nodeValue,
-                        name: data[2].childNodes[0].nodeValue,
+                        name: data[1].childNodes[0].nodeValue,
                         type: 'Wasserkraftwerk',
                         // unit: GWh
-                        production: utility.round(data[13].childNodes[0].nodeValue)
+                        production: utility.round(data[16].childNodes[0].nodeValue),
+                        coordinate: [coordN, coordE]
                     });
+                    // console.log(data[data.length-1].childNodes[0].nodeValue);
+                    // console.log(data.length);
                 }
             }
             // Kernkraft
@@ -294,12 +299,15 @@ utility = {
                 var data = kkws[y];
                 var canton = data.getElementsByTagName('canton')[0].childNodes[0].nodeValue;
                 if(canton == dataView.cantons[i].name) {
+                    var coordE = Number(data.getElementsByTagName('coordE')[0].childNodes[0].nodeValue);
+                    var coordN = Number(data.getElementsByTagName('coordN')[0].childNodes[0].nodeValue);
                     dataView.cantons[i].nuclearpowerplants.push({
                         id: data.getElementsByTagName('id')[0].childNodes[0].nodeValue,
                         name: data.getElementsByTagName('name')[0].childNodes[0].nodeValue,
                         type: 'Kernkraftwerk',
                         // unit: GWh
-                        production: utility.round(data.getElementsByTagName('production')[0].childNodes[0].nodeValue)
+                        production: utility.round(data.getElementsByTagName('production')[0].childNodes[0].nodeValue),
+                        coordinate: [coordN, coordE]
                     });
                 }
             }
@@ -313,7 +321,9 @@ utility = {
                        id: plant.id,
                        name: plant.name,
                        type: 'Windenergieanlage',
-                       production: plant.production
+                       production: plant.production,
+                       // unscharf reicht aus
+                       coordinate: [Math.round(plant.coordinate[0]), Math.round(plant.coordinate[1])]
                    });
                 });
             });

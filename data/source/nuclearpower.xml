@@ -7,6 +7,8 @@
         <canton>Bern</canton>
         <production>2934.180</production>
         <unit>GWh</unit>
+        <coordN>587018</coordN>
+        <coordE>201992</coordE>
         <asat>2015</asat>
     </plant>
     <plant>
@@ -16,6 +18,8 @@
         <canton>Aargau</canton>
         <production>628.540</production>
         <unit>GWh</unit>
+        <coordE>659448</coordE>
+        <coordN>267110</coordN>
         <asat>2015</asat>
     </plant>
     <plant>
@@ -25,6 +29,8 @@
         <canton>Aargau</canton>
         <production>2023.360</production>
         <unit>GWh</unit>
+        <coordE>659448</coordE>
+        <coordN>267110</coordN>
         <asat>2015</asat>
     </plant>
     <plant>
@@ -34,6 +40,8 @@
         <canton>Solothurn</canton>
         <production>7971.200</production>
         <unit>GWh</unit>
+        <coordE>639893</coordE>
+        <coordN>246271</coordN>
         <asat>2015</asat>
     </plant>
     <plant>
@@ -43,6 +51,8 @@
         <canton>Aargau</canton>
         <production>8598.520</production>
         <unit>GWh</unit>
+        <coordE>655966</coordE>
+        <coordN>272573</coordN>
         <asat>2015</asat>
     </plant>
 </nuclearpowerplants>

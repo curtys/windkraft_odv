@@ -43,8 +43,9 @@ window.addEventListener('load', function () {
 
             function createNode(item, plant) {
                 if (plant.production < productionMinimum || plant.id == item.highestprodfacility.id) return;
-                // objects need to be cloned, so that multiple configurations of the visualisation can exist at the same time
-                var node = dataViewUtility.clone(plant);
+                // objects don't need to be cloned in this context
+                // var node = dataViewUtility.clone(plant);
+                var node = plant;
                 node.cluster = item.abbr;
                 node.clusterid = clusterid;
                 node.radius = l_converter(plant.production);

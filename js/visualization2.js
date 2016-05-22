@@ -69,7 +69,16 @@ window.addEventListener('load', function(){
             nuclearplants.forEach(function(plant) {
                 createNode(data.globalHPFacilityNuclear, plant);
             });
-            
+
+
+            function createLink(coordinate, type) {
+                var link = 'https://map.geo.admin.ch/?X=' + coordinate[1] + '&Y=' + coordinate[0] +
+                    '&zoom=8&bgLayer=ch.swisstopo.pixelkarte-farbe&layers=';
+                if(type == 'Wasserkraftwerk') link += 'ch.bfe.statistik-wasserkraftanlagen';
+                else if(type == 'Kernkraftwerk') link += 'ch.bfe.kernkraftwerke';
+                else if(type == 'Windenergieanlage') link += 'ch.bfe.windenergieanlagen';
+                return link;
+            }
 
             function createLegend(clusters) {
                 var html = '', targetelem = document.querySelector('#legend-cont');
@@ -83,9 +92,9 @@ window.addEventListener('load', function(){
             }
 
             var clickController = (function(d){
-                var currElement, prevElement, prevElementColor,
+                var prevElement, prevElementColor,
                     highlightColor = '#2299dd', infoEle = document.querySelector('#descr'),
-                    backupEle = document.querySelector('#backup-descr');
+                    backupEle = document.querySelector('#backup-descr'), globalToggle = 'hidden';
 
                 return function (d) {
                     if (prevElement) {
@@ -106,17 +115,43 @@ window.addEventListener('load', function(){
                     else if(d.type == 'Kernkraftwerk') { energyType = 'Kernkraft'; totalProd = data.globalnuclearenergyprodution }
                     else if(d.type == 'Windenergieanlage') { energyType = 'Windkraft'; totalProd = data.globalwindenergyproduction }
                     var cantonInfo = dataViewUtility.getCantonByPlantId(data, d.id, true);
-                    var percentage = Math.round((d.production/totalProd)*10000)/100;
-                    percentage = (percentage < 1) ? Math.round((d.production/totalProd)*100000)/1000 : percentage;
-                    var html = '<strong>'+energyType+'</strong><br>'
+                    var percentageTypeGlobal = Math.round((totalProd/data.annualenergyproduction)*1000)/10;
+                    var percentageFacilityType = Math.round((d.production/totalProd)*10000)/100;
+                    var percentageFacilityGlobal = Math.round((d.production/data.annualenergyproduction)*10000)/100;
+                    percentageFacilityType = (percentageFacilityType < 1) ? Math.round((d.production/totalProd)*100000)/1000 : percentageFacilityType;
+                    percentageFacilityGlobal = (percentageFacilityGlobal < 0.01) ? 'weniger als 0.01' : percentageFacilityGlobal;
+                    var link = createLink(d.coordinate, d.type);
+                    var htmlExt = '<br><strong>'+energyType+'</strong><br>'
                         + 'Ganzjährliche Produktion von '+energyType+':<br><strong>' + totalProd + '</strong> GWh<br>'
-                        + Math.round((totalProd/data.annualenergyproduction)*1000)/10 
-                        + '% der schweizerischen Energieproduktion (Net ' + data.asat + ')<br>'
-                        + '<br>'
+                        + percentageTypeGlobal + '% der schweizerischen Energieproduktion (Net ' + data.asat + ')<br><br>'
                         +'<strong>' + d.name + '</strong><br>'
+                        + 'Kanton ' + cantonInfo.name + '<br>'
                         + 'Produktion: <strong>' + d.production + '</strong> GWh<br>'
-                        + percentage + '% der Gesamtproduktion von ' + energyType;
+                        + percentageFacilityType + '% der Gesamtproduktion von ' + energyType;
+
+                    var html = 'Das ' + d.type + ' <strong>'+d.name+'</strong> liefert ' + percentageFacilityGlobal +
+                        '% der Schweizer Energieproduktion<br><a target="_blank" href="'+link+'"> zeige auf Karte (extern)</a><br>' +
+                        '<label id="ext"> Ausführlich</label>' +
+                        '<br>' + '<div id="descr-ext">'+htmlExt+'</div>';
+
                     infoEle.innerHTML = backupEle.innerHTML = html;
+
+                    var bext = document.querySelectorAll('#ext');
+                    var descrext = document.querySelectorAll('#descr-ext');
+
+                    for(var y = 0; y < descrext.length; y++) {
+                        if(globalToggle == 'visible') descrext[y].style.visibility = 'visible';
+                        else descrext[y].style.visibility = 'hidden';
+                    }
+                    for(var i = 0; i < bext.length; i++) {
+                        bext[i].onclick = function() {
+                            for(var y = 0; y < descrext.length; y++) {
+                                var state = descrext[y].style.visibility;
+                                if(state == 'visible') descrext[y].style.visibility = globalToggle = 'hidden';
+                                else descrext[y].style.visibility = globalToggle = 'visible';
+                            }
+                        }
+                    }
                 };
             })();
 

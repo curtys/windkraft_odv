@@ -76,6 +76,16 @@ window.addEventListener('load', function () {
                 clusterid++;
             });
 
+
+            function createLink(coordinate, type) {
+                var link = 'https://map.geo.admin.ch/?X=' + coordinate[1] + '&Y=' + coordinate[0] +
+                    '&zoom=8&bgLayer=ch.swisstopo.pixelkarte-farbe&layers=';
+                if(type == 'Wasserkraftwerk') link += 'ch.bfe.statistik-wasserkraftanlagen';
+                else if(type == 'Kernkraftwerk') link += 'ch.bfe.kernkraftwerke';
+                else if(type == 'Windenergieanlage') link += 'ch.bfe.windenergieanlagen';
+                return link;
+            }
+
             function createLegend(clusters) {
                 var html = '', targetelem = document.querySelector('#legend-cont');
                 clusters.forEach(function (cluster) {
@@ -89,9 +99,9 @@ window.addEventListener('load', function () {
             }
 
             var clickController = (function (d) {
-                var currElement, prevElement, prevElementColor,
+                var prevElement, prevElementColor,
                     highlightColor = '#2299dd', infoEle = document.querySelector('#descr'),
-                    backupEle = document.querySelector('#backup-descr');
+                    backupEle = document.querySelector('#backup-descr'), globalToggle = 'hidden';
 
                 return function (d) {
                     if (prevElement) {
@@ -106,9 +116,18 @@ window.addEventListener('load', function () {
                     prevElementColor = d3.select(this).style('fill');
                     d3.select(this).style('fill', highlightColor);
                     prevElement = this;
+
+                    var link = createLink(d.coordinate, d.type);
                     var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
                     var total = clusterInfo.hydropowerproduction+clusterInfo.nuclearenergyproduction+clusterInfo.windenergyproduction;
-                    var html = '<strong>Kanton '+ clusterInfo.name+'</strong><br>'
+                    var percentageFacilityCanton = Math.round((d.production/total)*1000)/10;
+                    var percentageFacilityGlobal = Math.round((d.production/data.annualenergyproduction)*10000)/100;
+                    percentageFacilityGlobal = (percentageFacilityGlobal < 0.01) ? 'weniger als 0.01' : percentageFacilityGlobal;
+                    var percentageWindCanton = Math.round((clusterInfo.windenergyproduction/total)*1000)/10;
+                    var percentageWasserCanton = Math.round((clusterInfo.hydropowerproduction/total)*1000)/10;
+                    var percentageKernCanton = Math.round((clusterInfo.nuclearenergyproduction/total)*1000)/10;
+
+                    var htmlExt = '<br><strong>Kanton '+ clusterInfo.name+'</strong><br>'
                         + 'Ganzjährliche Produktion von<br>'
                         + 'Wasserkraft: <strong>' + clusterInfo.hydropowerproduction + '</strong> GWh' + '<br>'
                         + 'Kernenergie: <strong>' + clusterInfo.nuclearenergyproduction + '</strong> GWh' + '<br>'
@@ -118,8 +137,34 @@ window.addEventListener('load', function () {
                         + '<strong>' + d.type+' '+d.name+'</strong><br>'
                         + 'Produktion: ' + d.production + ' GWh<br>'
                         + Math.round((d.production/total)*1000)/10+'% der kantonalen Produktion<br>';
-                        // + '<br><a href="#map" class="show-loc">&#10148; Zeige auf der Karte</a>';
+
+                    var html = 'Das ' + d.type + ' <strong>'+d.name+'</strong> deckt ' + percentageFacilityCanton +
+                        '% der Produktion des Kt '+clusterInfo.name+' (Wind: ' + percentageWindCanton + '%, Wasser: ' +
+                        percentageWasserCanton + '%, KKW: ' + percentageKernCanton + '%) oder ' + percentageFacilityGlobal +
+                        '% der Schweizer Energieproduktion.<br><br>' +
+                        '<a target="_blank" href="'+link+'"> zeige auf Karte (extern)</a><br>' +
+                        '<label id="ext"> Ausführlich</label>' +
+                        '<br>' + '<div id="descr-ext">'+htmlExt+'</div>';
+
                     infoEle.innerHTML = backupEle.innerHTML = html;
+
+
+                    var bext = document.querySelectorAll('#ext');
+                    var descrext = document.querySelectorAll('#descr-ext');
+
+                    for(var y = 0; y < descrext.length; y++) {
+                        if(globalToggle == 'visible') descrext[y].style.visibility = 'visible';
+                        else descrext[y].style.visibility = 'hidden';
+                    }
+                    for(var i = 0; i < bext.length; i++) {
+                        bext[i].onclick = function() {
+                            for(var y = 0; y < descrext.length; y++) {
+                                var state = descrext[y].style.visibility;
+                                if(state == 'visible') descrext[y].style.visibility = globalToggle = 'hidden';
+                                else descrext[y].style.visibility = globalToggle = 'visible';
+                            }
+                        }
+                    }
                     
 
                 };

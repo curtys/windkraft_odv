@@ -79,11 +79,22 @@ h1 {
   }
 
   & .spacer {
+    //width: 10em;
     flex-basis: 30em;
+    flex-shrink: 2;
   }
 
   & #descr {
+    //width: 10em;
     flex-basis: 30em;
+    //pointer-events: none;
+
+    & #ext {
+      //pointer-events: initial;
+    }
+    & #descr-ext {
+      visibility: hidden;
+    }
   }
 
   & #vis {
@@ -91,9 +102,24 @@ h1 {
   }
 
   & .vis2 + #descr {
-    margin-left: -20em;
+    //margin-left: -20em;
   }
 
+  & a:before {
+    content: '\027A4';
+  }
+
+}
+
+label {
+  font-weight: bold;
+  &:before {
+    content: '\021F5';
+  }
+  &:hover, &:focus {
+    color: $blue2;
+    @include transition(color, 0.5s, ease);
+  }
 }
 
 // tooltip
@@ -141,25 +167,7 @@ h1 {
   }
 }
 
-iframe {
-  margin: 0;
-  margin-top: 2em;
-  width: 100%;
-  height: 800px;
-  border: none;
-}
-
 // Media
-
-@media only screen and (max-width: 1200px) {
-.spacer {display: none}
-  #vis-cont {
-    justify-content: center;
-    & .vis2 + #descr {
-      min-width: 20em;
-    }
-  }
-}
 
 @media only screen and (max-width: 1000px) {
   h1 {
@@ -172,9 +180,11 @@ iframe {
 
     & #backup-descr {
       display: block;
+      width: auto;
     }
     & #info {
       min-width: 0;
+      width: auto;
     }
     & fieldset {
       margin-top: 1em;
@@ -182,14 +192,6 @@ iframe {
   }
   #vis-cont {
     margin: 0;
-  }
-  #descr {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  #vis-cont {
     display: block;
     & #vis {
       display: block;
@@ -198,6 +200,23 @@ iframe {
         width: 100%;
         height: 100%;
       }
+    }
+  }
+  #descr {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  #info-flex {
+
+    & #backup-descr {
+      display: block;
+      width: 100%;
+    }
+    & #info {
+      min-width: 0;
+      width: 100%;
     }
   }
 }

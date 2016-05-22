@@ -30,6 +30,8 @@ window.addEventListener('load', function () {
 
     d3.json('data/data.json', function (err, json) {
 
+        if(err) console.warn(err.message);
+
         var data = json;
         var productionMinimum = 0;
         var configuration1 = {}, configuration2 = {};

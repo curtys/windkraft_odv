@@ -56,7 +56,7 @@
         <article><p>Der Quellcode ist auf Github verfügbar. <a href=""> zum Repository</a></p>
             <p>Es steht ebenfalls der aufbereitete Datensatz zum Download zur Verfügung. Dokumentation zum Datensatz
                 findest du unten.
-                <a href="data/data.json"> data.json</a></p></article>
+                <a href="jdata.php"> data.json</a></p></article>
 
         <article>
             <h4>Datenschema</h4>
@@ -86,7 +86,7 @@
                 </tr>
                 <tr>
                     <td>coordinate</td>
-                    <td>Ost und Nord Koordinaten in CH1903 Projektion</td>
+                    <td>Ost und Nord Koordinaten in CH1903 / LV03 Projektion</td>
                 </tr>
                 <tr>
                     <td>hydropowerproduction</td>

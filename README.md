@@ -4,7 +4,7 @@ Open Data Visualisation von Wasser-, Wind- und Kernkraftstatistiken.
 ## Datenschema
 Aufbereiteter Datensatz ist unter /data/data.json zu finden.
 
-```json
+```
 {
     "cantons": [
         {

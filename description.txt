@@ -1,0 +1,3 @@
+Simon Curty:
+
+Visualisierung der Energieproduktion von Schweizer Wind-, Wasser- und Kernkraftwerken.

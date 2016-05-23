@@ -7,7 +7,7 @@
           content="Open Data Visualisierung der Stromproduktion von Wasser-, Wind- und Kernkraftwerken">
     <title>Energieproduktion der Schweiz - Source</title>
     <link rel="stylesheet" type="text/css" href="css/main.min.css">
-    <link rel="stylesheet" type="text/css" href="css/aux.min.css">
+    <link rel="stylesheet" type="text/css" href="css/auxiliary.min.css">
 
 </head>
 <body>

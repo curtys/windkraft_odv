@@ -4,13 +4,14 @@
 h1 {
   text-align: center;
   font-size: 3em;
-  padding-top: 3rem;
+  @include pixel-fallback("padding-top", 3*$font_size_base);
 }
 
 
 #content {
-  padding-top: 1rem;
-  width: 50rem;
+  @include pixel-fallback("padding-top", 1*$font_size_base);
+  @include pixel-fallback("padding-bottom", 4*$font_size_base);
+  @include pixel-fallback("width", 50*$font_size_base);
   margin: 0 auto;
 
   & a:before {
@@ -18,11 +19,11 @@ h1 {
   }
 
   & section {
-    padding-top: 2rem;
+    @include pixel-fallback("padding-top", 2*$font_size_base);
   }
 
   & article {
-    margin-top: 1.5rem;
+    @include pixel-fallback("margin-top", 1.5*$font_size_base);
   }
 
 }
@@ -78,12 +79,12 @@ tr td:first-of-type {
 
 @media only screen and (max-width: 1000px) {
   h1 {
-    padding-top: 4rem;
+    @include pixel-fallback("padding-top", 4*$font_size_base);
     font-size: 2.5em;
   }
   #content {
-    padding-right: 2rem;
-    padding-left: 2rem;
+    @include pixel-fallback("padding-right", 4*$font_size_base);
+    @include pixel-fallback("padding-left", 4*$font_size_base);
     width: 100%;
   }
 }

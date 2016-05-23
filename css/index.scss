@@ -52,6 +52,7 @@ h1 {
   width: 70%;
   margin: 0 auto;
   padding-top: 2em;
+  padding-bottom: 2em;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -98,6 +99,10 @@ h1 {
       }
     }
   }
+}
+
+#footer {
+  color: $white1;
 }
 
 @media only screen and (max-width: 1000px) {

@@ -80,17 +80,24 @@ nav {
 h1 {
   text-align: center;
   font-size: 3em;
+  padding-top: 48px;
   padding-top: 3rem; }
 
 #content {
+  padding-top: 16px;
   padding-top: 1rem;
+  padding-bottom: 64px;
+  padding-bottom: 4rem;
+  width: 800px;
   width: 50rem;
   margin: 0 auto; }
   #content a:before {
     content: '\027A4'; }
   #content section {
+    padding-top: 32px;
     padding-top: 2rem; }
   #content article {
+    margin-top: 24px;
     margin-top: 1.5rem; }
 
 pre {
@@ -138,12 +145,15 @@ tr td:first-of-type {
 
 @media only screen and (max-width: 1000px) {
   h1 {
+    padding-top: 64px;
     padding-top: 4rem;
     font-size: 2.5em; }
 
   #content {
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 64px;
+    padding-right: 4rem;
+    padding-left: 64px;
+    padding-left: 4rem;
     width: 100%; } }
 @media only screen and (max-width: 800px) {
   th, td {

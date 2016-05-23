@@ -84,7 +84,8 @@ h1 {
   text-align: center; }
 
 #content {
-  margin-top: 4em; }
+  margin-top: 4em;
+  padding-bottom: 2em; }
 
 #info-flex {
   display: flex;

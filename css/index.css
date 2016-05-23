@@ -36,6 +36,7 @@ h1 {
   width: 70%;
   margin: 0 auto;
   padding-top: 2em;
+  padding-bottom: 2em;
   display: flex;
   justify-content: center;
   flex-wrap: wrap; }
@@ -65,6 +66,9 @@ h1 {
     #access .link-item div:hover path {
       fill: #056197;
       transition: fill 0.5s ease; }
+
+#footer {
+  color: #fff; }
 
 @media only screen and (max-width: 1000px) {
   #access {

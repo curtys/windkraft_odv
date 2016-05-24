@@ -139,8 +139,6 @@ h1 {
       visibility: hidden; }
   #vis-cont #vis {
     flex-grow: 2; }
-  #vis-cont a:before {
-    content: '\027A4'; }
 
 label {
   font-weight: bold; }

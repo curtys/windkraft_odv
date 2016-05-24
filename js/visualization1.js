@@ -142,7 +142,7 @@ window.addEventListener('load', function () {
                         '% der Produktion des Kt '+clusterInfo.name+' (Wind: ' + percentageWindCanton + '%, Wasser: ' +
                         percentageWasserCanton + '%, KKW: ' + percentageKernCanton + '%) oder ' + percentageFacilityGlobal +
                         '% der Schweizer Energieproduktion.<br><br>' +
-                        '<a target="_blank" href="'+link+'"> zeige auf Karte (extern)</a><br>' +
+                        '<a target="_blank" href="'+link+'">&#10148; Zeige auf Karte (extern)</a><br>' +
                         '<label id="ext"> Ausführlich</label>' +
                         '<br>' + '<div id="descr-ext">'+htmlExt+'</div>';
 

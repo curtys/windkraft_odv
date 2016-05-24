@@ -49,7 +49,8 @@
                         <div class="inner-item thumb">
                             <!--                        --><?php //echo file_get_contents('img/res/vis2.svg'); ?>
                             <!--                        &#9883; &apid;-->
-                            &cirscir;
+<!--                            &cirscir;-->
+                            &#x029C2;
                         </div>
                         <div class="inner-item">
                             Ein Vergleich der Elektrizitätsproduktion des Jahres 2015 von Wind-, Wasser- und

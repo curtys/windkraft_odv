@@ -130,7 +130,7 @@ window.addEventListener('load', function(){
                         + percentageFacilityType + '% der Gesamtproduktion von ' + energyType;
 
                     var html = 'Das ' + d.type + ' <strong>'+d.name+'</strong> liefert ' + percentageFacilityGlobal +
-                        '% der Schweizer Energieproduktion<br><a target="_blank" href="'+link+'"> zeige auf Karte (extern)</a><br>' +
+                        '% der Schweizer Energieproduktion<br><a target="_blank" href="'+link+'">&#10148; Zeige auf Karte (extern)</a><br>' +
                         '<label id="ext"> Ausführlich</label>' +
                         '<br>' + '<div id="descr-ext">'+htmlExt+'</div>';
 

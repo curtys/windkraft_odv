@@ -100,9 +100,7 @@
 
     </div>
 
-    <div id="footer">
-        Simon Curty | Universität Bern | Open Data
-    </div>
+    <?php include 'fragments/footer.php' ?>
 </div>
 
 </body>

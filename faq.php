@@ -66,9 +66,7 @@
         </section>
 
     </div>
-    <div id="footer">
-        <div>Simon Curty | Universität Bern | Open Data</div>
-    </div>
+    <?php include 'fragments/footer.php' ?>
 </div>
 <script>
     /* Open */

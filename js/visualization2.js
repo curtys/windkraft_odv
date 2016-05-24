@@ -10,21 +10,8 @@ window.addEventListener('load', function(){
         clusterPadding = 12, // separation between different-color circles
         maxRadius = 12;
 
-    // Reihenfolge der Kantone:
-    // ZH, BE, LU, UR, SZ, OW, NW, GL, ZG, FR, SO, (BS), BL, SH, AR, AI, SG, GR, AG, TG, TI, VD, VS, NE, GE, JU
-    //['#0066CC', '#E7423F', '#248BCC', '#FFD72E', '#E7423F', '#DD3322', '#E7423F', '#E8423F', '#268BCC',
-    //    '#000000', '#E8423F', '#E2001A', '#FFD72E', '#E8423F', '#010202', '#009933', '#FFD72E', '#248BCC', '#16A74E',
-    //    '#E8423F', '#16A74E', '#E8423F', '#16A74E', '#FFD134', '#E8423F']
-
-    var color = d3.scale.ordinal().range(["#18c61a", "#9817ff", "#d31911", "#24b7f1", "#fa82ce", "#736c31", "#1263e2",
-        "#18c199", "#ed990a", "#f2917f", "#7b637c", "#a8b311", "#a438c0", "#d00d5e", "#1e7b1d", "#05767b", "#aaa1f9",
-        "#a5aea1", "#a75312", "#026eb8", "#94b665", "#91529e", "#caa74f", "#c90392", "#a84e5d", "#6a4cf1", "#1ac463",
-        "#d89ab1", "#3c764d", "#2dbdc5", "#fb78fa", "#a6a9cd", "#c1383d", "#8b614e", "#73be38", "#ff8d52", "#cea37e",
-        "#b53c7e", "#656d61", "#436f90", "#5e7304", "#82b792", "#fb88a3", "#dd8df2", "#6a5cc0", "#d098d5", "#ac15dc",
-        "#a4543b", "#76b4cc", "#6963a4", "#8e620d", "#77adf8", "#c9a918", "#99537d", "#acaf7d", "#7850d5", "#ae3a9f",
-        "#68bd74", "#e09d60", "#1069cd", "#d50438", "#c03d17", "#79b6af", "#517430", "#db9b94", "#095cf8", "#b1b045",
-        "#c0a4a9", "#bc01c1", "#906033", "#e49c3f", "#8e4db9", "#bb3a64", "#cb1478", "#776b09", "#94b743", "#763eff",
-        "#1a7a3e", "#617046", "#915c62", "#ec8dc0", "#ba22ac", "#437461", "#913ddc", "#4bbda8"]);
+    // Reihenfolge: Wasser, Wind, Nuclear
+    var color = d3.scale.ordinal().range(['#4F6DB2', '#78286B', '#ED4239']);
 
     d3.json('data/data.json', function (err, json) {
 
@@ -130,7 +117,7 @@ window.addEventListener('load', function(){
                         + percentageFacilityType + '% der Gesamtproduktion von ' + energyType;
 
                     var html = 'Das ' + d.type + ' <strong>'+d.name+'</strong> liefert ' + percentageFacilityGlobal +
-                        '% der Schweizer Energieproduktion<br><a target="_blank" href="'+link+'"> zeige auf Karte (extern)</a><br>' +
+                        '% der Schweizer Energieproduktion<br><a target="_blank" href="'+link+'">&#10148; Zeige auf Karte (extern)</a><br>' +
                         '<label id="ext"> Ausführlich</label>' +
                         '<br>' + '<div id="descr-ext">'+htmlExt+'</div>';
 

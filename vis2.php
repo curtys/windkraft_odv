@@ -11,8 +11,8 @@
     <link rel="stylesheet" type="text/css" href="css/vis2.min.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/d3-tip.min.js"></script>
-    <script src="js/dataviewutility.min.js"></script>
-    <script src="js/visualization2.min.js"></script>
+    <script src="js/dataviewutility.js"></script>
+    <script src="js/visualization2.js"></script>
 
 </head>
 <body>
@@ -70,9 +70,7 @@
             <div id="descr"></div>
         </div>
     </div>
-    <div id="footer">
-        Simon Curty | Universität Bern | Open Data
-    </div>
+    <?php include 'fragments/footer.php' ?>
 </div>
 <script>
     /* Open */

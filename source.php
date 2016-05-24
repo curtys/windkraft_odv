@@ -7,7 +7,7 @@
           content="Open Data Visualisierung der Stromproduktion von Wasser-, Wind- und Kernkraftwerken">
     <title>Energieproduktion der Schweiz - Source</title>
     <link rel="stylesheet" type="text/css" href="css/main.min.css">
-    <link rel="stylesheet" type="text/css" href="css/aux.min.css">
+    <link rel="stylesheet" type="text/css" href="css/auxiliary.min.css">
 
 </head>
 <body>
@@ -125,9 +125,7 @@
             </article>
         </section>
     </div>
-    <div id="footer">
-        <div>Simon Curty | Universität Bern | Open Data</div>
-    </div>
+    <?php include 'fragments/footer.php' ?>
 </div>
 <script>
     /* Open */

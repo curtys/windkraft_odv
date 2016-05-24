@@ -77,6 +77,9 @@ nav {
     font-size: 40px !important;
     top: 15px;
     right: 35px; } }
+@media only screen and (max-width: 500px) {
+  .overlay a {
+    font-size: 1.5em; } }
 h1 {
   margin-top: 48px;
   margin-top: 3rem;
@@ -139,8 +142,6 @@ h1 {
       visibility: hidden; }
   #vis-cont #vis {
     flex-grow: 2; }
-  #vis-cont a:before {
-    content: '\027A4'; }
 
 label {
   font-weight: bold; }
@@ -207,10 +208,10 @@ label {
     width: 100%; }
     #info-flex #backup-descr {
       display: block;
-      width: auto; }
+      width: 40%; }
     #info-flex #info {
       min-width: 0;
-      width: auto; }
+      width: 40%; }
     #info-flex fieldset {
       margin-top: 1em; }
 

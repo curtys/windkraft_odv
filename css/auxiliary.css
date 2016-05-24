@@ -77,6 +77,9 @@ nav {
     font-size: 40px !important;
     top: 15px;
     right: 35px; } }
+@media only screen and (max-width: 500px) {
+  .overlay a {
+    font-size: 1.5em; } }
 h1 {
   text-align: center;
   font-size: 3em;
@@ -158,5 +161,11 @@ tr td:first-of-type {
 @media only screen and (max-width: 800px) {
   th, td {
     padding: 0.5em; } }
+@media only screen and (max-width: 600px) {
+  #content {
+    padding-right: 16px;
+    padding-right: 1rem;
+    padding-left: 16px;
+    padding-left: 1rem; } }
 
-/*# sourceMappingURL=aux.css.map */
+/*# sourceMappingURL=auxiliary.css.map */

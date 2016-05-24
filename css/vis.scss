@@ -107,7 +107,7 @@ h1 {
   }
 
   & a:before {
-    content: '\027A4';
+    //content: '\10148';
   }
 
 }
@@ -181,11 +181,11 @@ label {
 
     & #backup-descr {
       display: block;
-      width: auto;
+      width: 40%;
     }
     & #info {
       min-width: 0;
-      width: auto;
+      width: 40%;
     }
     & fieldset {
       margin-top: 1em;

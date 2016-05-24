@@ -47,9 +47,10 @@
                     <h3>Produktion von Wasserkraft, Kernkraft und Windenergie</h3>
                     <div class="inner-flex">
                         <div class="inner-item thumb">
-                            <!--                        --><?php //echo file_get_contents('img/res/vis2.svg'); ?>
-                            <!--                        &#9883; &apid;-->
-                            &cirscir;
+                                                    <?php echo file_get_contents('img/cirscir.svg'); ?>
+<!--                                                    &#9883; &apid;-->
+<!--                            &cirscir;-->
+<!--                            &#x029C2;-->
                         </div>
                         <div class="inner-item">
                             Ein Vergleich der Elektrizitätsproduktion des Jahres 2015 von Wind-, Wasser- und
@@ -99,9 +100,7 @@
 
     </div>
 
-    <div id="footer">
-        Simon Curty | Universität Bern | Open Data
-    </div>
+    <?php include 'fragments/footer.php' ?>
 </div>
 
 </body>

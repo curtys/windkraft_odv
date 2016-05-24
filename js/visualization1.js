@@ -125,7 +125,8 @@ window.addEventListener('load', function () {
 
                     var link = createLink(d.coordinate, d.type);
                     var clusterInfo = dataViewUtility.getCantonByAbbr(data, d.cluster, true);
-                    var total = clusterInfo.hydropowerproduction+clusterInfo.nuclearenergyproduction+clusterInfo.windenergyproduction;
+                    var total = Math.round((clusterInfo.hydropowerproduction +
+                            clusterInfo.nuclearenergyproduction + clusterInfo.windenergyproduction)*10)/10;
                     var percentageFacilityCanton = Math.round((d.production/total)*1000)/10;
                     var percentageFacilityGlobal = Math.round((d.production/data.annualenergyproduction)*10000)/100;
                     percentageFacilityGlobal = (percentageFacilityGlobal < 0.01) ? 'weniger als 0.01' : percentageFacilityGlobal;

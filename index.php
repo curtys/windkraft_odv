@@ -47,10 +47,8 @@
                     <h3>Produktion von Wasserkraft, Kernkraft und Windenergie</h3>
                     <div class="inner-flex">
                         <div class="inner-item thumb">
-                                                    <?php echo file_get_contents('img/cirscir.svg'); ?>
-<!--                                                    &#9883; &apid;-->
-<!--                            &cirscir;-->
-<!--                            &#x029C2;-->
+                            <?php echo file_get_contents('img/cirscir.svg'); ?>
+
                         </div>
                         <div class="inner-item">
                             Ein Vergleich der Elektrizitätsproduktion des Jahres 2015 von Wind-, Wasser- und

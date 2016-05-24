@@ -10,8 +10,8 @@
     <link rel="stylesheet" type="text/css" href="css/vis.min.css">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="js/d3-tip.min.js"></script>
-    <script src="js/dataviewutility.js"></script>
-    <script src="js/visualization1.js"></script>
+    <script src="js/dataviewutility.min.js"></script>
+    <script src="js/visualization1.min.js"></script>
 
 </head>
 <body>

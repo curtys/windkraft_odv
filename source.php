@@ -76,7 +76,7 @@
                     <tbody>
                     <tr>
                         <td>id</td>
-                        <td>Identifikationsnummer des Kraftwerks vom BFE.</td>
+                        <td>Identifikationsnummer des Kraftwerks. Bei Wasserkraftwerken die WASTA-Nummer.</td>
                     </tr>
                     <tr>
                         <td>type</td>
